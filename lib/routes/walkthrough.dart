@@ -386,6 +386,31 @@ Widget fifthPage(BuildContext context, PageController pc)
               ],
             )
         ),
+        Center(
+          child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+              primary: Colors.indigo,
+              ),
+
+                onPressed: ()
+                {
+                  pc.animateToPage(
+                    0,
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              icon: const Icon(Icons.restart_alt),
+              label: const Text("Restart tutorial")
+            ),
+          ),
+
+        const Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: dotWidgetFunction(5),
+        ),
+        const SizedBox(height: 160)
       ]
   );
 }
