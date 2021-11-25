@@ -16,27 +16,25 @@ class WalkThrough extends StatefulWidget {
 class _WalkThroughState extends State<WalkThrough> {
   PageController pc = PageController(initialPage: 0);
   bool? isDone = false;
-  void loadTutorial() async
-  {
-    final prefs = await SharedPreferences.getInstance();
-    bool? tutorialDone = prefs.getBool('tutorial_done');
-    isDone = tutorialDone ?? false;
 
-  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    SharedPreferences.setMockInitialValues({});
-    loadTutorial();
-    if(isDone == true)
+    _loadPage();
+  }
+  _loadPage() async{
+    return checkSeen();
+  }
+  Future checkSeen() async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _isDone = (prefs.getBool('tutorial_seen') ?? false);
+    if(_isDone)
       {
-
         Navigator.pushNamed(context, '/welcome');
-
       }
   }
-
   @override
   Widget build(BuildContext context) {
 
@@ -130,7 +128,7 @@ Widget secondPage()
         const Spacer(),
         Row(
           children: [
-            Icon(Icons.add_box_outlined),
+            const Icon(Icons.add_box_outlined),
             Text(
               "Share posts",
               style: gettingStartedExplanation,
@@ -322,14 +320,11 @@ Widget fourthPage()
     ],
   );
 }
+makeSeen() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('tutorial_seen', true);
 
-void _writeTutorial() async
-{
-  final prefs = await SharedPreferences.getInstance();
-  final key = "tutorial_done";
-  final value = true;
-  await prefs.setBool(key, value);
-}
+  }
 
 Widget fifthPage(BuildContext context, PageController pc)
 {
@@ -360,9 +355,8 @@ Widget fifthPage(BuildContext context, PageController pc)
 
                       onPressed: ()
                       {
+                        makeSeen();
                         Navigator.pushNamed(context, '/welcome');
-                        _writeTutorial();
-
                       },
                       icon: const Icon(Icons.emoji_flags),
                       label: const Text("Finish tutorial")
