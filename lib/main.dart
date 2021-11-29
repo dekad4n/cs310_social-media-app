@@ -9,7 +9,7 @@ import 'package:sucial_cs310_project/routes/welcome.dart';
 void main() {
 
   runApp(MaterialApp(
-    initialRoute: '/walkthrough',
+    initialRoute: '/signup',
     routes: {
         '/walkthrough': (context) => WalkThrough(),
         '/login': (context) => Login(),
