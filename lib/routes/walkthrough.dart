@@ -38,16 +38,18 @@ class _WalkThroughState extends State<WalkThrough> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      body: PageView(
-        controller: pc,
-        children: [
-          firstPage(),
-          secondPage(),
-          thirdPage(),
-          fourthPage(),
-          fifthPage(context, pc),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: PageView(
+          controller: pc,
+          children: [
+            firstPage(),
+            secondPage(),
+            thirdPage(),
+            fourthPage(),
+            fifthPage(context, pc),
+          ],
+        ),
       ),
     );
   }
@@ -253,71 +255,73 @@ Widget thirdPage()
 
 Widget fourthPage()
 {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const SizedBox(height: 100),
-      Center(
-        child: Padding(
-          padding: Dimen.onStartingMarginInsets,
-          child: const Icon(
-            Icons.report_outlined,
-            size: 150,
-            color: AppColors.warningColor,
+  return SafeArea(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 90),
+        Center(
+          child: Padding(
+            padding: Dimen.onStartingMarginInsets,
+            child: const Icon(
+              Icons.report_outlined,
+              size: 150,
+              color: AppColors.warningColor,
+            ),
           ),
         ),
-      ),
-      Center(
-        child: Text(
-            "Avoid",
-            style: gettingStartedStyle
+        Center(
+          child: Text(
+              "Avoid",
+              style: gettingStartedStyle
+          ),
         ),
-      ),
-      Padding(
-        padding: Dimen.onStartingMarginInsets,
-        child: Row(
-            children: [
-              Expanded(
-                child: Card(
-                  elevation: 8,
-                  shadowColor: Colors.indigo,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            "Racism",
-                            style: warningStyle
-                        ),
-                        Text(
-                            "Homophobia",
-                            style: warningStyle
+        Padding(
+          padding: Dimen.onStartingMarginInsets,
+          child: Row(
+              children: [
+                Expanded(
+                  child: Card(
+                    elevation: 8,
+                    shadowColor: Colors.indigo,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              "Racism",
+                              style: warningStyle
+                          ),
+                          Text(
+                              "Homophobia",
+                              style: warningStyle
 
-                        ),
-                        Text(
-                            "Any kind of insults, scam",
-                            style: warningStyle
-                        ),
-                        Text(
-                            "Violation of right of privacy",
-                            style: warningStyle
-                        ),
-                      ],
+                          ),
+                          Text(
+                              "Any kind of insults, scam",
+                              style: warningStyle
+                          ),
+                          Text(
+                              "Violation of right of privacy",
+                              style: warningStyle
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ]
+                )
+              ]
+          ),
         ),
-      ),
-      const Spacer(),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: dotWidgetFunction(4),
-      ),
-      const SizedBox(height: 160,)
-    ],
+        const Spacer(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: dotWidgetFunction(4),
+        ),
+        const SizedBox(height: 160,)
+      ],
+    )
   );
 }
 makeSeen() async{
