@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:sucial_cs310_project/utils/colors.dart';
+import 'package:sucial_cs310_project/utils/styles.dart';
 
 
 class Login extends StatefulWidget {
@@ -18,31 +20,43 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColors.backgroundColor,
 
-        appBar: AppBar(
-          leading:IconButton(
-            icon: Icon(Icons.close),
-            onPressed: (){
-              Navigator.pushNamed(context, '/welcome' );
-            },
-          ),
-
-          title: Text('Back to Main Menu'),
-          backgroundColor: Colors.deepPurple,
-
-        ),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 40,),
-                  Image.network('https://res.cloudinary.com/teepublic/image/private/s--OhLHtLWr--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1575503762/production/designs/7039866_0.jpg',
-                    width: 150,
-                    height: 150,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 50, 24, 0),
+                        child: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: (){
+                            Navigator.pushNamed(context, '/welcome' );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 20,),
-                  Text('Login',
+                  const SizedBox(height: 40,),
+                  Container(
+                    height: 150,
+                    width: 150,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage('https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Free-Image.png',
+
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20,),
+                  const Text('Log-In',
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -51,7 +65,7 @@ class _LoginState extends State<Login> {
 
                   ),
                   Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -65,15 +79,10 @@ class _LoginState extends State<Login> {
                                 child: TextFormField(
 
                                   decoration: InputDecoration(
-                                    fillColor: Colors.grey,
+                                    fillColor: AppColors.backgroundColor,
                                     filled: true,
                                     hintText: 'E-mail',
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.black,
-                                      ),
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    ),
+                                    border: UnderlineInputBorder(),
                                   ),
                                   keyboardType: TextInputType.emailAddress,
 
@@ -103,7 +112,7 @@ class _LoginState extends State<Login> {
                             ],
 
                           ),
-                          SizedBox(height: 16,),
+                          const SizedBox(height: 16,),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -111,15 +120,10 @@ class _LoginState extends State<Login> {
                                 flex: 1,
                                 child: TextFormField(
                                   decoration: InputDecoration(
-                                    fillColor: Colors.grey,
+                                    fillColor: AppColors.backgroundColor,
                                     filled: true,
                                     hintText: 'Password',
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.black,
-                                      ),
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    ),
+                                    border: UnderlineInputBorder(),
                                   ),
                                   keyboardType: TextInputType.text,
                                   obscureText: true,
@@ -149,28 +153,30 @@ class _LoginState extends State<Login> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 16,),
+                          const SizedBox(height: 16,),
                           Row(
 
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: OutlinedButton(
+                              Center(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurple[200],
+                                  ),
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()){
                                       _formKey.currentState!.save();
+                                      Navigator.pushNamed(context, '/feed');
                                     }
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                                     child: Text(
-                                      'Login',
-                                      //style: kButtonDarkTextStyle,
+                                      'Log-In',
+                                      style: hintStyleLoginButton,
+
+
                                     ),
-                                  ),
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: Colors.white,
                                   ),
                                 ),
                               ),

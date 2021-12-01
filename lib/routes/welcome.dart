@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
 import 'package:sucial_cs310_project/routes/signup.dart';
+import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
 
 
@@ -18,21 +19,15 @@ class _WelcomeState extends State<Welcome> {
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+
         body:
         Container(
             height: size.height,
             width: double.infinity,
             child: Stack(
               children: <Widget>[
-                Positioned(
-                    top: 0,
-                    left:0,
-                    right:0,
-                    bottom: -400,
-                    child:
-                    Image.asset("assets/myappview.png")
 
-                ),
                 Column(
                     mainAxisAlignment: MainAxisAlignment.center,
 
@@ -59,18 +54,18 @@ class _WelcomeState extends State<Welcome> {
                               //padding: EdgeInsets.symmetric(vertical: 20,horizontal:20),
 
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20,horizontal:20),
+                                padding: const EdgeInsets.symmetric(vertical: 20,horizontal:40),
                                 child: TextButton(
 
                                     style: TextButton.styleFrom(
-                                      backgroundColor: Colors.indigo,
+                                      backgroundColor: Colors.deepPurple[200],
                                     ),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context) =>Login()));
                                     },
                                     child: const Text("LOGIN",
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.black,
                                       ),)),
                               ),
                             ),
@@ -92,17 +87,17 @@ class _WelcomeState extends State<Welcome> {
 
 
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                                padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 40),
                                 child: TextButton(
                                     style: TextButton.styleFrom(
-                                      backgroundColor: Colors.pinkAccent,
+                                      backgroundColor: Colors.deepPurple[200],
                                     ),
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context) =>Signup()));
                                     },
                                     child: const Text("SIGN UP",
                                       style: TextStyle(
-                                        color: Colors.indigo,
+                                        color: Colors.black,
                                       ),)),
                               ),
                             ),

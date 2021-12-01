@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
+import 'package:flutter/material.dart';
 
 final gettingStartedStyleBold = GoogleFonts.raleway(
   fontSize: 32,
@@ -20,6 +21,10 @@ final smallExplanation = GoogleFonts.raleway(
   fontSize: 16,
   color: AppColors.explanationColor,
 );
+final hintStyleLogin = GoogleFonts.raleway(
+  color: Colors.black,
+  fontSize: 16,
+);
 final warningStyle = GoogleFonts.raleway(
   fontSize: 16,
   color: AppColors.warningColor,
@@ -33,4 +38,8 @@ final sucialStyleBig = GoogleFonts.dancingScript(
 final sucialStylemMed = GoogleFonts.dancingScript(
   fontSize: 32,
   color: AppColors.sucialColor,
+);
+final hintStyleLoginButton = GoogleFonts.raleway(
+  fontSize: 20,
+  color:Colors.black,
 );
