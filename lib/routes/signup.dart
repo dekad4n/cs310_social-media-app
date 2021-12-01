@@ -4,6 +4,7 @@ import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
 
+
 class Signup extends StatefulWidget {
 
   @override
@@ -17,10 +18,31 @@ class _SignupState extends State<Signup> {
   String uname = "";
   TextEditingController pass = TextEditingController();
   TextEditingController passagain = TextEditingController();
+  Future<void> signUpSuccessful(String title, String message) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
 
+            return AlertDialog(
+              title: Text(title),
+              content: SingleChildScrollView(
+                child: Text(message),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/login');
+                    },
+                    child: Text('OK')),
+              ],
+            );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
       body: Padding(
         padding: Dimen.onStartingMarginInsets,
         child: SingleChildScrollView(
@@ -34,9 +56,15 @@ class _SignupState extends State<Signup> {
                   children: <Widget>[
                     Padding(
                       padding:const EdgeInsets.all(0.0),
-                      child: Image.asset('assets/myappview.png',
+                      child: Container(
                         height: 100,
                         width: 100,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage('https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Free-Image.png')
+                          )
+                        ),
                       )
                     ),
                   ],
@@ -62,13 +90,13 @@ class _SignupState extends State<Signup> {
                         flex: 1,
                         child: TextFormField(
                           decoration: InputDecoration(
-                            fillColor: AppColors.sucialColor,
+                            fillColor: AppColors.backgroundColor,
                             filled: true,
                             icon: const Icon(Icons.email),
                             hintText: 'E-mail',
-                            hintStyle: smallExplanation,
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            hintStyle: hintStyleLogin,
+                            border: UnderlineInputBorder (
+                              borderRadius: Dimen.borderRadius,
                               borderSide: BorderSide(
                                 color: AppColors.activeDots,
                               ),
@@ -112,13 +140,13 @@ class _SignupState extends State<Signup> {
                         flex: 1,
                         child: TextFormField(
                           decoration: InputDecoration(
-                            fillColor: AppColors.sucialColor,
+                            fillColor: AppColors.backgroundColor,
                             filled: true,
                             icon: const Icon(Icons.person),
                             hintText: 'Username',
-                            hintStyle: smallExplanation,
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            hintStyle: hintStyleLogin,
+                            border: UnderlineInputBorder (
+                              borderRadius: Dimen.borderRadius,
                               borderSide: BorderSide(
                                 color: AppColors.activeDots,
                               ),
@@ -160,14 +188,14 @@ class _SignupState extends State<Signup> {
                         flex: 1,
                         child: TextFormField(
                           decoration: InputDecoration(
-                            fillColor: AppColors.sucialColor,
+                            fillColor: AppColors.backgroundColor,
                             filled: true,
                             icon: const Icon(Icons.lock),
                             hintText: 'Password',
-                            hintStyle: smallExplanation,
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(
+                            hintStyle: hintStyleLogin,
+                            border:  UnderlineInputBorder (
+                              borderRadius: Dimen.borderRadius,
+                              borderSide: const BorderSide(
                                 color: AppColors.activeDots,
                               ),
                             ),
@@ -209,14 +237,14 @@ class _SignupState extends State<Signup> {
                         flex: 1,
                         child: TextFormField(
                           decoration: InputDecoration(
-                            fillColor: AppColors.sucialColor,
+                            fillColor: AppColors.backgroundColor,
                             filled: true,
                             icon: const Icon(Icons.lock),
                             hintText:'Password Again',
-                            hintStyle: smallExplanation,
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(
+                            hintStyle: hintStyleLogin,
+                            border: UnderlineInputBorder(
+                              borderRadius: Dimen.borderRadius,
+                              borderSide: const BorderSide(
                                 color: AppColors.activeDots,
                               ),
                             ),
@@ -254,18 +282,25 @@ class _SignupState extends State<Signup> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Expanded(
-                        child: OutlinedButton(
+                        child: ElevatedButton(
+
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.deepPurple[200],
+                          ),
+
                           onPressed: () {
                             if(_formKey.currentState!.validate()){
                               _formKey.currentState!.save();
-                              Navigator.pushNamed(context, '/profile');
+                              setState(() {
+                                signUpSuccessful('Sign up is successful', 'Click ok to go login page');
+                              });
                             }
                           },
                           child: Padding(
                             padding: Dimen.symmetricSignupInsets,
                             child: Text(
                               'Sign Up',
-                              style: smallExplanation,
+                              style: hintStyleLogin,
                             ),
                           ),
                         ),
@@ -277,41 +312,57 @@ class _SignupState extends State<Signup> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Image.asset( 'assets/facebooklogo.jpg',
-                      width: 42,
-                      height: 42,
-                    ),
+
                     Expanded(
                       flex: 1,
-                      child: OutlinedButton(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.deepPurple[100],
+                        ),
                         onPressed: () {
-
                         },
                         child: Padding(
                           padding: Dimen.symmetricSignupInsets,
-                          child: Text('Login With Facebook', style: smallExplanation,
+                          child: Container(
+                            height: 42,
+                            width: 42,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        'https://www.transparentpng.com/thumb/facebook-logo-png/facebook-logo-clipart-hd-10.png'
+                                    )
+                                )
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset('assets/googlelogo.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
+
                     Expanded(
                       flex: 1,
-                      child: OutlinedButton(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.deepPurple[100],
+                        ),
                         onPressed: () {
 
                         },
                         child: Padding(
                           padding: Dimen.symmetricSignupInsets,
-                          child: Text(
-                            'Login With Google',
-                            style: smallExplanation,
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Container(
+                              height: 42,
+                              width: 42,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-dwglogo-19.png'
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )
+                              ),
+                            ),
                           ),
                         ),
                       ),
