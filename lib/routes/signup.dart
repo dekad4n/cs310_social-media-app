@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:sucial_cs310_project/services/auth.dart';
+
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
@@ -18,6 +20,8 @@ class _SignupState extends State<Signup> {
   String uname = "";
   TextEditingController pass = TextEditingController();
   TextEditingController passagain = TextEditingController();
+  AuthService auth = AuthService();
+
   Future<void> signUpSuccessful(String title, String message) async {
     return showDialog(
         context: context,
@@ -34,7 +38,7 @@ class _SignupState extends State<Signup> {
                     onPressed: () {
                       Navigator.of(context).pushNamed('/login');
                     },
-                    child: Text('OK')),
+                    child: const Text('OK')),
               ],
             );
         });
@@ -97,7 +101,7 @@ class _SignupState extends State<Signup> {
                             hintStyle: hintStyleLogin,
                             border: UnderlineInputBorder (
                               borderRadius: Dimen.borderRadius,
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: AppColors.activeDots,
                               ),
                             ),
@@ -147,7 +151,7 @@ class _SignupState extends State<Signup> {
                             hintStyle: hintStyleLogin,
                             border: UnderlineInputBorder (
                               borderRadius: Dimen.borderRadius,
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: AppColors.activeDots,
                               ),
                             ),
@@ -291,6 +295,7 @@ class _SignupState extends State<Signup> {
                           onPressed: () {
                             if(_formKey.currentState!.validate()){
                               _formKey.currentState!.save();
+                              auth.signupWithMailAndPass(mail, pass.toString());
                               setState(() {
                                 signUpSuccessful('Sign up is successful', 'Click ok to go login page');
                               });
