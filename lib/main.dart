@@ -57,7 +57,7 @@ class AppBase extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/signup',
+        initialRoute: '/login',
         routes: {
           '/walkthrough': (context) => WalkThrough(),
           '/login': (context) => Login(),
