@@ -1,7 +1,10 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
@@ -11,7 +14,9 @@ import 'feed.dart';
 
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  const Login({Key? key, required this.analytics, required this.observer}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -44,7 +49,15 @@ class _LoginState extends State<Login> {
         });
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setCurrentScreen(widget.analytics, 'Init Login Page', 'login.dart');
+    setLogEvent(widget.analytics, "init_login");
+  }
+  @override
   Widget build(BuildContext context){
+    setCurrentScreen(widget.analytics, 'Login Page', 'login.dart');
     final user = Provider.of<User?>(context);
     if(user == null) {
       return Scaffold(
@@ -196,7 +209,8 @@ class _LoginState extends State<Login> {
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
-                                        var user = auth.loginWithMailAndPass(mail, pass);
+                                        auth.loginWithMailAndPass(mail, pass);
+
 
                                       }
                                     },
@@ -231,6 +245,7 @@ class _LoginState extends State<Login> {
                               primary: AppColors.backgroundColor,
                             ),
                             onPressed: () {
+                              setCurrentScreen(widget.analytics, 'f Login Page', 'login.dart');
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
@@ -286,7 +301,7 @@ class _LoginState extends State<Login> {
           )
       );
     }else{
-      return FeedView();
+      return FeedView(analytics: widget.analytics, observer: widget.observer);
     }
   }
 }
