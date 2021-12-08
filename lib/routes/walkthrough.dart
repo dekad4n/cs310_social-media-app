@@ -1,5 +1,8 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
 import 'package:sucial_cs310_project/widgets/pageview_dots.dart';
@@ -7,7 +10,9 @@ import 'package:sucial_cs310_project/utils/colors.dart';
 
 
 class WalkThrough extends StatefulWidget {
-  const WalkThrough({Key? key}) : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  const WalkThrough({Key? key, required this.analytics, required this.observer}) : super(key: key);
 
   @override
   _WalkThroughState createState() => _WalkThroughState();
@@ -22,6 +27,8 @@ class _WalkThroughState extends State<WalkThrough> {
     // TODO: implement initState
     super.initState();
     _loadPage();
+    setCurrentScreen(widget.analytics, 'Init Walkthrough View Page', 'walkthrough.dart');
+
   }
   _loadPage() async{
     return checkSeen();
@@ -35,9 +42,10 @@ class _WalkThroughState extends State<WalkThrough> {
         Navigator.pushNamed(context, '/welcome');
       }
   }
+
   @override
   Widget build(BuildContext context) {
-
+    setCurrentScreen(widget.analytics, 'Walkthrough View Page', 'walkthrough.dart');
     return SafeArea(
       child: Scaffold(
         body: PageView(

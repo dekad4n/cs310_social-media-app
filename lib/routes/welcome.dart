@@ -1,12 +1,17 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
 import 'package:sucial_cs310_project/routes/signup.dart';
+import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
 
 
 class Welcome extends StatefulWidget {
-  const Welcome({Key? key}) : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  const Welcome({Key? key, required this.analytics, required this.observer}) : super(key: key);
 
   @override
   _WelcomeState createState() => _WelcomeState();
@@ -15,8 +20,14 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setCurrentScreen(widget.analytics, 'Init Welcome Page', 'welcome.dart');
+  }
+  @override
   Widget build(BuildContext context) {
-
+    setCurrentScreen(widget.analytics, 'Welcome Page', 'welcome.dart');
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -61,7 +72,7 @@ class _WelcomeState extends State<Welcome> {
                                       backgroundColor: Colors.deepPurple[200],
                                     ),
                                     onPressed: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Login()));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Login(analytics: widget.analytics,observer: widget.observer)));
                                     },
                                     child: const Text("LOGIN",
                                       style: TextStyle(
@@ -93,7 +104,7 @@ class _WelcomeState extends State<Welcome> {
                                       backgroundColor: Colors.deepPurple[200],
                                     ),
                                     onPressed: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Signup()));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Signup(analytics: widget.analytics,observer: widget.observer)));
                                     },
                                     child: const Text("SIGN UP",
                                       style: TextStyle(

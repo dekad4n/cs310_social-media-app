@@ -30,6 +30,7 @@ class AuthService{
       return _userFromFirebase(user);
     }
     on FirebaseAuthException catch (e) {
+      print("why?");
       return null;
       }
     catch(e)

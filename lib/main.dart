@@ -10,16 +10,30 @@ import 'package:sucial_cs310_project/routes/signup.dart';
 import 'package:sucial_cs310_project/routes/welcome.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  //FirebaseCrashlytics.instance.crash();
+  //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  @override
+  void initState()
+  {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +41,17 @@ class MyApp extends StatelessWidget {
         future: _initialization,
         builder: (context, snapshot) {
           if(snapshot.hasError) {
-            print('Cannot connect to firebase: '+snapshot.error.toString());
-            return MaterialApp(
+
+            return const MaterialApp(
               home: Scaffold(body: Center(child: Text("No FB"))),
             );
           }
           if(snapshot.connectionState == ConnectionState.done) {
-            print('Firebase connected');
+
             return AppBase();
           }
 
-          return MaterialApp(
+          return const MaterialApp(
             home: Scaffold(body: Center(child: Text("Loading"))),
           );
         }
@@ -54,16 +68,17 @@ class AppBase extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamProvider<User?>.value(
       value: AuthService().user,
+
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/login',
+        initialRoute: '/walkthrough',
         routes: {
-          '/walkthrough': (context) => WalkThrough(),
-          '/login': (context) => Login(),
-          '/signup': (context) => Signup(),
-          '/welcome': (context) => Welcome(),
-          '/feed': (context) => FeedView(),
+          '/walkthrough': (context) => WalkThrough(analytics: analytics, observer: observer),
+          '/login': (context) => Login(analytics: analytics, observer: observer),
+          '/signup': (context) => Signup(analytics: analytics, observer: observer),
+          '/welcome': (context) => Welcome(analytics: analytics, observer: observer),
+          '/feed': (context) => FeedView(analytics: analytics, observer: observer),
         },
 
       ),

@@ -1,8 +1,11 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
+import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 
 import 'package:sucial_cs310_project/utils/colors.dart';
@@ -11,7 +14,9 @@ import 'package:sucial_cs310_project/utils/styles.dart';
 
 
 class Signup extends StatefulWidget {
-
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  const Signup({Key? key, required this.analytics, required this.observer}) : super(key: key);
   @override
   _SignupState createState() => _SignupState();
 }
@@ -24,9 +29,15 @@ class _SignupState extends State<Signup> {
   TextEditingController pass = TextEditingController();
   TextEditingController passagain = TextEditingController();
   AuthService _auth = AuthService();
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setCurrentScreen(widget.analytics, 'Init Signup Page', 'signup.dart');
+  }
   @override
   Widget build(BuildContext context) {
+    setCurrentScreen(widget.analytics, 'Signup Page', 'signup.dart');
     final user = Provider.of<User?>(context);
     if(user == null) {
       return Scaffold(
@@ -282,7 +293,8 @@ class _SignupState extends State<Signup> {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
                                   _auth.signupWithMailAndPass(
-                                      mail, pass.toString());
+                                      mail, pass.text);
+                                  setuserId(widget.analytics, uname);
                                 }
                               },
                               child: Padding(
@@ -333,7 +345,7 @@ class _SignupState extends State<Signup> {
                               primary: AppColors.backgroundColor,
                             ),
                             onPressed: () {
-
+                              _auth.signInWithGoogle();
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
@@ -365,7 +377,7 @@ class _SignupState extends State<Signup> {
         ),
       );
     }
-    return FeedView();
+    return FeedView(analytics: widget.analytics,observer: widget.observer);
   }
 }
 
