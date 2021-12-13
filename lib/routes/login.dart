@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
   }
   @override
   Widget build(BuildContext context){
-    setCurrentScreen(widget.analytics, 'Login Page', 'login.dart');
+
     final user = Provider.of<User?>(context);
     if(user == null) {
       return Scaffold(

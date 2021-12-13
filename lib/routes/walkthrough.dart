@@ -45,7 +45,7 @@ class _WalkThroughState extends State<WalkThrough> {
 
   @override
   Widget build(BuildContext context) {
-    setCurrentScreen(widget.analytics, 'Walkthrough View Page', 'walkthrough.dart');
+
     return SafeArea(
       child: Scaffold(
         body: PageView(
