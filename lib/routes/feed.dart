@@ -3,6 +3,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
+import 'package:sucial_cs310_project/services/user_service.dart';
 
 class FeedView extends StatefulWidget {
   final FirebaseAnalytics analytics;
@@ -22,7 +23,8 @@ class _FeedViewState extends State<FeedView> {
   }
   @override
   Widget build(BuildContext context) {
-    setCurrentScreen(widget.analytics, 'Feed View Page', 'feed.dart');
+
+
     return Scaffold(
       body: Center(child: OutlinedButton(
         onPressed: ()

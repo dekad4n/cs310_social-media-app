@@ -27,7 +27,7 @@ class _WelcomeState extends State<Welcome> {
   }
   @override
   Widget build(BuildContext context) {
-    setCurrentScreen(widget.analytics, 'Welcome Page', 'welcome.dart');
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/SearchPage2.dart';
 //import 'package:sucial_cs310_project/routes/SearchPage.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
+import 'package:sucial_cs310_project/routes/signup_followup.dart';
 import 'package:sucial_cs310_project/routes/walkthrough.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
 import 'package:sucial_cs310_project/routes/signup.dart';
@@ -74,7 +75,7 @@ class AppBase extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/SearchPage2',
+        initialRoute: '/signup',
         routes: {
           '/walkthrough': (context) => WalkThrough(analytics: analytics, observer: observer),
           '/login': (context) => Login(analytics: analytics, observer: observer),
@@ -82,6 +83,7 @@ class AppBase extends StatelessWidget {
           '/welcome': (context) => Welcome(analytics: analytics, observer: observer),
           '/feed': (context) => FeedView(analytics: analytics, observer: observer),
           '/SearchPage2': (context) => SearchPage2(),
+          '/signup_followup': (context) => SignUpFollowUp(analytics: analytics, observer: observer),
         },
 
       ),

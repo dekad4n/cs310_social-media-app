@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
+import 'package:sucial_cs310_project/routes/signup_followup.dart';
 import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
-
+import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
@@ -29,6 +30,7 @@ class _SignupState extends State<Signup> {
   TextEditingController pass = TextEditingController();
   TextEditingController passagain = TextEditingController();
   AuthService _auth = AuthService();
+  UsersService usersService = UsersService();
   @override
   void initState() {
     // TODO: implement initState
@@ -37,7 +39,6 @@ class _SignupState extends State<Signup> {
   }
   @override
   Widget build(BuildContext context) {
-    setCurrentScreen(widget.analytics, 'Signup Page', 'signup.dart');
     final user = Provider.of<User?>(context);
     if(user == null) {
       return Scaffold(
@@ -162,6 +163,10 @@ class _SignupState extends State<Signup> {
                                   String trimmedValue = value.trim();
                                   if (trimmedValue.isEmpty) {
                                     return 'Username field cannot be empty';
+                                  }
+                                  usersService.doesUsernameExistIn(uname);
+                                  if (usersService.doesUsernameExist) {
+                                    return 'Username is already in use!';
                                   }
                                 }
                                 return null;
@@ -289,11 +294,12 @@ class _SignupState extends State<Signup> {
                                 primary: Colors.deepPurple[200],
                               ),
 
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
                                   _auth.signupWithMailAndPass(
                                       mail, pass.text);
+
                                   setuserId(widget.analytics, uname);
                                 }
                               },
@@ -377,7 +383,8 @@ class _SignupState extends State<Signup> {
         ),
       );
     }
-    return FeedView(analytics: widget.analytics,observer: widget.observer);
+    UsersService().addUser(uname,user.uid);
+    return SignUpFollowUp(analytics: widget.analytics,observer: widget.observer);
   }
 }
 
