@@ -3,6 +3,8 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sucial_cs310_project/routes/SearchPage2.dart';
+//import 'package:sucial_cs310_project/routes/SearchPage.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
 import 'package:sucial_cs310_project/routes/signup_followup.dart';
 import 'package:sucial_cs310_project/routes/walkthrough.dart';
@@ -80,6 +82,7 @@ class AppBase extends StatelessWidget {
           '/signup': (context) => Signup(analytics: analytics, observer: observer),
           '/welcome': (context) => Welcome(analytics: analytics, observer: observer),
           '/feed': (context) => FeedView(analytics: analytics, observer: observer),
+          '/SearchPage2': (context) => SearchPage2(),
           '/signup_followup': (context) => SignUpFollowUp(analytics: analytics, observer: observer),
         },
 
