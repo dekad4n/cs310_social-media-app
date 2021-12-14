@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
+import 'package:sucial_cs310_project/routes/signup_followup.dart';
 import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
@@ -29,6 +30,7 @@ class _SignupState extends State<Signup> {
   TextEditingController pass = TextEditingController();
   TextEditingController passagain = TextEditingController();
   AuthService _auth = AuthService();
+  UsersService usersService = UsersService();
   @override
   void initState() {
     // TODO: implement initState
@@ -161,6 +163,10 @@ class _SignupState extends State<Signup> {
                                   String trimmedValue = value.trim();
                                   if (trimmedValue.isEmpty) {
                                     return 'Username field cannot be empty';
+                                  }
+                                  usersService.doesUsernameExistIn(uname);
+                                  if (usersService.doesUsernameExist) {
+                                    return 'Username is already in use!';
                                   }
                                 }
                                 return null;
@@ -378,7 +384,7 @@ class _SignupState extends State<Signup> {
       );
     }
     UsersService().addUser(uname,user.uid);
-    return FeedView(analytics: widget.analytics,observer: widget.observer);
+    return SignUpFollowUp(analytics: widget.analytics,observer: widget.observer);
   }
 }
 

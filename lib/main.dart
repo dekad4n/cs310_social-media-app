@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
+import 'package:sucial_cs310_project/routes/signup_followup.dart';
 import 'package:sucial_cs310_project/routes/walkthrough.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
 import 'package:sucial_cs310_project/routes/signup.dart';
@@ -72,13 +73,14 @@ class AppBase extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/walkthrough',
+        initialRoute: '/signup',
         routes: {
           '/walkthrough': (context) => WalkThrough(analytics: analytics, observer: observer),
           '/login': (context) => Login(analytics: analytics, observer: observer),
           '/signup': (context) => Signup(analytics: analytics, observer: observer),
           '/welcome': (context) => Welcome(analytics: analytics, observer: observer),
           '/feed': (context) => FeedView(analytics: analytics, observer: observer),
+          '/signup_followup': (context) => SignUpFollowUp(analytics: analytics, observer: observer),
         },
 
       ),
