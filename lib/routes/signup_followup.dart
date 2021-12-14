@@ -139,7 +139,10 @@ class _SignUpFollowUpState extends State<SignUpFollowUp> {
                                       _formKey.currentState!.save();
 
                                       usersService.setFullName(fullName,user!.uid);
-
+                                      if(image != null) {
+                                        usersService.uploadProfilePicture(
+                                            user, File(image!.path));
+                                      }
                                       Navigator.pushNamed(context, '/feed');
                                     }
                                   },
