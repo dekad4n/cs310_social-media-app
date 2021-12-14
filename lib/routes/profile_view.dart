@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/models/post.dart';
-import 'package:untitled/ui/post_tile.dart';
+import 'package:sucial_cs310_project/model/post.dart';
+import 'package:sucial_cs310_project/ui/post_tile.dart';
 
 class ProfileView extends StatefulWidget {
 
