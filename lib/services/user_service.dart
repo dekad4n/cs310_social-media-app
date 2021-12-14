@@ -7,6 +7,7 @@ class UsersService{
   Future addUser(String username, String? userId) async{
     await users.doc(userId).set({
       'username': username,
+      'usernameLower': username.toLowerCase(),
       'userId': userId,
       'biography': '',
       'profilepicture': '',
@@ -31,7 +32,8 @@ class UsersService{
     await users.doc(userId).update({
       'biography': '',
       'profilepicture': '',
-      'fullName': fullName
+      'fullName': fullName,
+      'fullNameLower': fullName.toLowerCase(),
     });
   }
 
