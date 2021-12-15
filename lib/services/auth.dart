@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sucial_cs310_project/services/user_service.dart';
 
 class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -12,10 +13,11 @@ class AuthService{
     return _auth.authStateChanges().map(_userFromFirebase);
   }
 
-  Future signupWithMailAndPass(String mail, String pass) async{
+  Future signupWithMailAndPass(String mail, String pass, String uname) async{
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: mail, password: pass);
       User user = result.user!;
+      UsersService().addUser(uname,user.uid);
       return _userFromFirebase(user);
     }catch(e)
     {
@@ -66,5 +68,24 @@ class AuthService{
     User? user =  result.user;
     return _userFromFirebase(user);
   }
+  Future<bool> changePassword(String crrPass, String newPass) async{
+    bool isSuccess = true;
+    final user = _auth.currentUser;
+    final credentials = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: crrPass
+    );
 
+    user.reauthenticateWithCredential(credentials).then((value){
+      user.updatePassword(newPass).then((value)
+          {
+            isSuccess = true;
+          }).catchError((error){
+        isSuccess =  false;
+      });
+    }).catchError((error) {
+      isSuccess = false;
+    });  // end of catch
+    return isSuccess;
+  } // end of function
 }

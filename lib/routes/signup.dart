@@ -298,9 +298,9 @@ class _SignupState extends State<Signup> {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
                                   _auth.signupWithMailAndPass(
-                                      mail, pass.text);
-
+                                      mail, pass.text, uname);
                                   setuserId(widget.analytics, uname);
+
                                 }
                               },
                               child: Padding(
@@ -383,7 +383,7 @@ class _SignupState extends State<Signup> {
         ),
       );
     }
-    UsersService().addUser(uname,user.uid);
+
     return SignUpFollowUp(analytics: widget.analytics,observer: widget.observer);
   }
 }

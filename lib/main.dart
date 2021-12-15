@@ -4,8 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/SearchPage2.dart';
+import 'package:sucial_cs310_project/routes/edit_profile.dart';
 //import 'package:sucial_cs310_project/routes/SearchPage.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
+import 'package:sucial_cs310_project/routes/profile_view.dart';
 import 'package:sucial_cs310_project/routes/signup_followup.dart';
 import 'package:sucial_cs310_project/routes/walkthrough.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
@@ -71,12 +73,12 @@ class AppBase extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamProvider<User?>.value(
       value: AuthService().user,
-
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/signup',
+        initialRoute: '/welcome',
         routes: {
+          '/profile': (context) => ProfileView(analytics: analytics, observer: observer),
           '/walkthrough': (context) => WalkThrough(analytics: analytics, observer: observer),
           '/login': (context) => Login(analytics: analytics, observer: observer),
           '/signup': (context) => Signup(analytics: analytics, observer: observer),

@@ -26,7 +26,7 @@ class _SignUpFollowUpState extends State<SignUpFollowUp> {
   UsersService usersService = UsersService();
   final picker = ImagePicker();
   File? image;
-
+  late bool isDone = false;
   Future<File>? imageFile;
   Future pickImage() async{
     try {
@@ -40,132 +40,140 @@ class _SignUpFollowUpState extends State<SignUpFollowUp> {
       print('Error');
     }
   }
-
+  Future<void> isSignupDone(User? user) async{
+    isDone = await usersService.isSignupDone(user!.uid);
+  }
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: Dimen.onStartingMarginInsets,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 100),
-                IconButton(
-                    iconSize: 200,
-                    onPressed: () =>  pickImage(),
-                    icon: CircleAvatar(
-                      radius: 100,
-                      child: ClipOval(
-
-                        child: image != null ? Image.file(
-                            image!,
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
-                            ): Image.asset('assets/nopp.png'),
-                      )
-                    )
-                ),
-                Form(
-                  key: _formKey,
+    isSignupDone(user);
+    if(!isDone)
+      {
+        return Scaffold(
+            backgroundColor: AppColors.backgroundColor,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: Dimen.onStartingMarginInsets,
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: Dimen.signBoxWidth,
-                          height: Dimen.signBoxHeight,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                    fillColor: AppColors.backgroundColor,
-                                    filled: true,
-                                    icon: const Icon(Icons.email),
-                                    hintText: 'Full name',
-                                    hintStyle: hintStyleLogin,
-                                    border: UnderlineInputBorder(
-                                      borderRadius: Dimen.borderRadius,
-                                      borderSide: const BorderSide(
-                                        color: AppColors.activeDots,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 100),
+                      IconButton(
+                          iconSize: 200,
+                          onPressed: () =>  pickImage(),
+                          icon: CircleAvatar(
+                              radius: 100,
+                              child: ClipOval(
+
+                                child: image != null ? Image.file(
+                                  image!,
+                                  width: 200,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ): Image.asset('assets/nopp.png'),
+                              )
+                          )
+                      ),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: Dimen.signBoxWidth,
+                              height: Dimen.signBoxHeight,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                        fillColor: AppColors.backgroundColor,
+                                        filled: true,
+                                        icon: const Icon(Icons.email),
+                                        hintText: 'Full name',
+                                        hintStyle: hintStyleLogin,
+                                        border: UnderlineInputBorder(
+                                          borderRadius: Dimen.borderRadius,
+                                          borderSide: const BorderSide(
+                                            color: AppColors.activeDots,
+                                          ),
+                                        ),
+                                      ),
+
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Full name field cannot be empty';
+                                        } else {
+                                          String trimmedValue = value.trim();
+                                          if (trimmedValue.isEmpty) {
+                                            return 'Full name field cannot be empty';
+                                          }
+                                        }
+                                        return null;
+                                      },
+
+                                      onSaved: (value) {
+                                        if (value != null) {
+                                          fullName = value;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: Dimen.symmetricSignup),
+                            SizedBox(
+                              width: 150,
+                              child: Row( // width 150
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: ElevatedButton(
+
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.deepPurple[200],
+                                      ),
+
+                                      onPressed: () async {
+                                        if (_formKey.currentState!.validate()) {
+                                          _formKey.currentState!.save();
+
+                                          usersService.setFullName(fullName,user!.uid);
+                                          if(image != null) {
+                                            usersService.uploadProfilePicture(
+                                                user, File(image!.path));
+                                          }
+                                          Navigator.pushNamed(context, '/feed');
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: Dimen.symmetricSignupInsets,
+                                        child: Text(
+                                          'Next',
+                                          style: hintStyleLogin,
+                                        ),
                                       ),
                                     ),
                                   ),
-
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return 'Full name field cannot be empty';
-                                    } else {
-                                      String trimmedValue = value.trim();
-                                      if (trimmedValue.isEmpty) {
-                                        return 'Full name field cannot be empty';
-                                      }
-                                    }
-                                    return null;
-                                  },
-
-                                  onSaved: (value) {
-                                    if (value != null) {
-                                      fullName = value;
-                                    }
-                                  },
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: Dimen.symmetricSignup),
-                        SizedBox(
-                          width: 150,
-                          child: Row( // width 150
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Expanded(
-                                child: ElevatedButton(
-
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.deepPurple[200],
-                                  ),
-
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState!.save();
-
-                                      usersService.setFullName(fullName,user!.uid);
-                                      if(image != null) {
-                                        usersService.uploadProfilePicture(
-                                            user, File(image!.path));
-                                      }
-                                      Navigator.pushNamed(context, '/feed');
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: Dimen.symmetricSignupInsets,
-                                    child: Text(
-                                      'Next',
-                                      style: hintStyleLogin,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      )
-    );
+              ),
+            )
+        );
+      }
+    Navigator.pushNamed(context, '/feed');
+    return Scaffold(body: Center(child: Text('Loading'),),);
   }
 }

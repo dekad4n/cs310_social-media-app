@@ -57,12 +57,10 @@ class _LoginState extends State<Login> {
   }
   @override
   Widget build(BuildContext context){
-
     final user = Provider.of<User?>(context);
     if(user == null) {
       return Scaffold(
           backgroundColor: AppColors.backgroundColor,
-
           body: SingleChildScrollView(
             child: Center(
               child: Column(
@@ -210,8 +208,6 @@ class _LoginState extends State<Login> {
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
                                         auth.loginWithMailAndPass(mail, pass);
-
-
                                       }
                                     },
                                     child: Padding(
