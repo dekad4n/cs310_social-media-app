@@ -5,10 +5,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:sucial_cs310_project/model/user_profile.dart';
 
 class UsersService{
   final CollectionReference users = FirebaseFirestore.instance.collection('users');
-  FirebaseStorage storage = FirebaseStorage.instance;
+  final FirebaseStorage storage = FirebaseStorage.instance;
   bool doesUsernameExist = false;
   Future addUser(String username, String? userId) async{
     await users.doc(userId).set({
@@ -17,9 +18,22 @@ class UsersService{
       'userId': userId,
       'biography': '',
       'profilepicture': 'https://firebasestorage.googleapis.com/v0/b/sucial-ff03d.appspot.com/o/user%2Fprofile%2FprofilePic%2Fnopp.png?alt=media&token=eaebea99-fc2d-4ede-893d-070e2d2595b0',
-      'fullName': 'unknown'
+      'fullName': 'unknown',
+      'isSignupDone': false
     });
   }
+  Future getUser(String userId) async
+  {
+    var crrGet = await users.doc(userId).get();
+  }
+  Future isSignupDone(String userId) async{
+    bool? dynamicNested;
+    users.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
+      dynamicNested = documentSnapshot.get(FieldPath(['isSignupDone']));
+      });
+    return dynamicNested ?? false;
+  }
+
   Future<String> uploadFile(User? user,File file) async{
     var storageRef = storage.ref().child("user/profile/profilePic/${user!.uid}");
     var uploadTask = await storageRef.putFile(file);
@@ -47,13 +61,18 @@ class UsersService{
     doesUsernameExist = await _doesUsernameExist(username);
   }
   setProfilePic(String url, String userId) async{
-    await users.doc(userId).update({
+    users.doc(userId).update({
       'profilepicture': url,
     });
   }
+  setBiography(String bio, String userId) async{
+    users.doc(userId).update({
+      'biography': bio,
+    });
+  }
   setFullName(String fullName, String userId) async{
-    await users.doc(userId).update({
-      'biography': '',
+    users.doc(userId).update({
+      'isSignupDone': true,
       'fullName': fullName,
       'fullNameLower': fullName.toLowerCase(),
     });
