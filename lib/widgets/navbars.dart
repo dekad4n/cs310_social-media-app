@@ -11,6 +11,12 @@ AppBar appBarDefault(){
         icon: const Icon(Icons.add),
       ),
     ),
+    actions: [
+      IconButton(
+          onPressed: (){},
+          icon: const Icon(Icons.send)
+      )
+    ],
     title: Text(
       'Sucial',
       style: sucialStylemMed,
@@ -24,17 +30,52 @@ AppBar appBarDefault(){
 BottomNavigationBar bottomNavBar(BuildContext context)
 {
   return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-          icon: IconButton(
-              onPressed: (){
-                Navigator.pushNamed(context, '/feed');
-              },
-              icon: const Icon(Icons.home),
-          ),
-        label: '',
+        BottomNavigationBarItem(
+            icon: IconButton(
 
-      ),
+                onPressed: (){
+                  Navigator.pushNamed(context, '/feed');
+                },
+                icon: const Icon(Icons.home),
+            ),
+          label: '',
+
+        ),
+        BottomNavigationBarItem(
+          icon: IconButton(
+
+            onPressed: (){
+              Navigator.pushNamed(context, '/search_page');
+            },
+            icon: const Icon(Icons.search),
+          ),
+          label: '',
+
+        ),
+
+        BottomNavigationBarItem(
+          icon: IconButton(
+            onPressed: (){
+              Navigator.pushNamed(context, '/feed');
+            },
+            icon: const Icon(Icons.tag),
+          ),
+          label: '',
+
+        ),
+        BottomNavigationBarItem(
+          icon: IconButton(
+            onPressed: (){
+              Navigator.pushNamed(context, '/feed');
+            },
+            icon: const Icon(Icons.notifications),
+          ),
+          label: '',
+
+        ),
+
 
         BottomNavigationBarItem(
             icon: IconButton(

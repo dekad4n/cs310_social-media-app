@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
+import 'package:sucial_cs310_project/widgets/alert.dart';
 
 class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -25,14 +27,14 @@ class AuthService{
       return  null;
     }
   }
-  Future loginWithMailAndPass(String mail, String pass) async {
+  Future loginWithMailAndPass(String mail, String pass, BuildContext context) async {
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: mail, password: pass);
       User user = result.user!;
       return _userFromFirebase(user);
     }
     on FirebaseAuthException catch (e) {
-      print("why?");
+      showAlertScreen(context, "Wrong password or lost connection", "Try again");
       return null;
       }
     catch(e)
@@ -69,15 +71,15 @@ class AuthService{
     return _userFromFirebase(user);
   }
   Future<bool> changePassword(String crrPass, String newPass) async{
-    bool isSuccess = true;
+    bool isSuccess = false;
     final user = _auth.currentUser;
     final credentials = EmailAuthProvider.credential(
         email: user!.email!,
         password: crrPass
     );
 
-    user.reauthenticateWithCredential(credentials).then((value){
-      user.updatePassword(newPass).then((value)
+    await user.reauthenticateWithCredential(credentials).then((value) async{
+      await user.updatePassword(newPass).then((value)
           {
             isSuccess = true;
           }).catchError((error){

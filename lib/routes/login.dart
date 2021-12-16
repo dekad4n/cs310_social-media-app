@@ -207,7 +207,7 @@ class _LoginState extends State<Login> {
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         _formKey.currentState!.save();
-                                        auth.loginWithMailAndPass(mail, pass);
+                                        auth.loginWithMailAndPass(mail, pass, context);
                                       }
                                     },
                                     child: Padding(

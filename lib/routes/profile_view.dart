@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
 import 'package:sucial_cs310_project/routes/edit_profile.dart';
+import 'package:sucial_cs310_project/routes/login.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/ui/post_tile.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
@@ -32,16 +33,17 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context){
     final user = Provider.of<User?>(context);
-    return Scaffold(
-      appBar: appBarDefault(),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: usersService.users.doc(user!.uid).get(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-          if(snapshot.hasError)
+    if(user != null) {
+      return Scaffold(
+        appBar: appBarDefault(),
+        body: FutureBuilder<DocumentSnapshot>(
+          future: usersService.users.doc(user.uid).get(),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+            if(snapshot.hasError)
             {
-              return Center(child: Text("Refresh the page!"));
+              return const Center(child: Text("Refresh the page!"));
             }
-          if(snapshot.connectionState == ConnectionState.done)
+            if(snapshot.connectionState == ConnectionState.done)
             {
               UserProfile userProfile = UserProfile.fromMap(snapshot.data!.data() as Map<String,dynamic>);
               return SingleChildScrollView(
@@ -105,7 +107,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           const SizedBox(width: 12,),
                           Text(userProfile.biography),
-                          Spacer(),
+                          const Spacer(),
                           const SizedBox(width: 40,),
                         ],
 
@@ -118,7 +120,7 @@ class _ProfileViewState extends State<ProfileView> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           children: myPosts.map(
-                              (post) => PostTile(
+                                  (post) => PostTile(
                                   post: post,
                                   delete: ()
                                   {
@@ -150,11 +152,12 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               );
             }
-          return Center(child: Text('Sth went wrong'),);
-        },
-      ),
-      bottomNavigationBar: bottomNavBar(context),
-
-    );
+            return const Center(child: Text('Loading...'),);
+          },
+        ),
+        bottomNavigationBar: bottomNavBar(context),
+      );
+    }
+    return Login(analytics: widget.analytics, observer: widget.observer);
   }
 }

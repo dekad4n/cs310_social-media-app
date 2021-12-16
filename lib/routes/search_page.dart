@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
+import 'package:sucial_cs310_project/widgets/navbars.dart';
 
 class SearchPage2 extends StatefulWidget {
   const SearchPage2({Key? key}) : super(key: key);
@@ -25,8 +26,6 @@ class _SearchPageState2 extends State<SearchPage2> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       resizeToAvoidBottomInset: false,
-
-
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -88,6 +87,7 @@ class _SearchPageState2 extends State<SearchPage2> {
           ),
         ],
       ),
+      bottomNavigationBar: bottomNavBar(context),
     );
   }
 }
