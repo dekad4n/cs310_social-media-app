@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,9 +30,8 @@ class _EditProfileState extends State<EditProfile> {
   String? fullName;
   String? biography;
   File? image;
-  String oldPassword = "";
-  String newPassword = "";
-  String newPasswordAgain= "";
+  TextEditingController oldPassword = TextEditingController();
+  TextEditingController pass = TextEditingController();
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -43,15 +41,14 @@ class _EditProfileState extends State<EditProfile> {
         this.image = imageTemporary;
       });
     } catch (e) {
-      print('Error');
+      // TO DO
     }
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    fullName = widget.userProfile.fullName;
-    biography = widget.userProfile.biography;
+    oldPassword.text = "";
 
   }
   @override
@@ -61,7 +58,14 @@ class _EditProfileState extends State<EditProfile> {
       appBar: appBarDefault(),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
@@ -110,7 +114,7 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: InputDecoration(
                               fillColor: AppColors.backgroundColor,
                               filled: true,
-                              hintText: fullName,
+                              hintText: widget.userProfile.fullName,
                             ),
                             onSaved: (value) {
                               if (value != null) {
@@ -136,7 +140,7 @@ class _EditProfileState extends State<EditProfile> {
                             decoration: InputDecoration(
                               fillColor: AppColors.backgroundColor,
                               filled: true,
-                              hintText: biography,
+                              hintText: widget.userProfile.biography,
                             ),
 
                             validator: (value) {
@@ -171,11 +175,11 @@ class _EditProfileState extends State<EditProfile> {
                               hintText: "Old Password",
 
                             ),
-                            onSaved: (value) {
-                              if (value != null) {
-                                oldPassword = value;
-                              }
-                            },
+                            controller: oldPassword,
+                            keyboardType: TextInputType.text,
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
                           ),
                         ),
                       ],
@@ -194,8 +198,13 @@ class _EditProfileState extends State<EditProfile> {
                               hintText: "New Password",
 
                             ),
+                            controller: pass,
+                            keyboardType: TextInputType.text,
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
                             validator: (value) {
-                              if(oldPassword != "")
+                              if(oldPassword.text != "")
                               {
                                 if (value == null) {
                                   return 'Password field cannot be empty';
@@ -208,49 +217,15 @@ class _EditProfileState extends State<EditProfile> {
                                     return 'Password must be at least 8 characters long';
                                   }
                                 }
-                                newPassword = value;
                               }
                               return null;
-                            },
-                            onSaved: (value) {
-                              if (value != null) {
-                                newPassword = value;
-                              }
                             },
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8.0),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: TextFormField(
 
-                            decoration: InputDecoration(
-                              fillColor: AppColors.backgroundColor,
-                              filled: true,
-                              hintText: "New Password Again",
-
-                            ),
-                            validator: (value)
-                            {
-                              if(value != newPassword)
-                                {
-                                  return "New passwords does not match";
-                                }
-                              return null;
-                            },
-                            onSaved: (value) {
-                            if (value != null) {
-                              newPasswordAgain = value;
-                            }
-                          },
-                          ),
-                        ),
-                      ],
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -260,30 +235,33 @@ class _EditProfileState extends State<EditProfile> {
                               primary: Colors.deepPurple[200],
                             ),
                             onPressed: () async {
-                              if (_formKey.currentState!.validate())  {
-                                _formKey.currentState!.save();
-                                if(biography != null) {
-                                  _usersService.setBiography(
-                                      biography!, widget.userProfile.userId);
-                                }
-                                if(fullName != null)
-                                  {
-                                    _usersService.setFullName(
-                                        fullName!, widget.userProfile.userId);
-                                  }
-
-                                if(oldPassword != "") {
+                              bool tryAgain = false;
+                              if (oldPassword.text != "")  {
+                                if(_formKey.currentState!.validate()) {
+                                  print("Old pass: ${oldPassword.text}");
                                   bool isSuccess = await _auth.changePassword(
-                                      oldPassword, newPassword);
+                                      oldPassword.text, pass.text);
                                   if (!isSuccess) {
+                                    tryAgain = true;
                                     showAlertScreen(
                                         context, "Old password is wrong",
                                         "Try again");
                                   }
-                                  else {
-                                    Navigator.pushNamed(context, '/profile');
-                                  }
                                 }
+                              }
+                              _formKey.currentState!.save();
+
+                              if(biography != null) {
+                                await _usersService.setBiography(
+                                    biography!, widget.userProfile.userId);
+                              }
+                              if(fullName != null)
+                              {
+                                await _usersService.setFullName(
+                                    fullName!, widget.userProfile.userId);
+                              }
+                              if(!tryAgain) {
+                                Navigator.pushNamed(context, '/profile');
                               }
                             },
                             child: Padding(

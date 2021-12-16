@@ -28,6 +28,7 @@ class _FeedViewState extends State<FeedView> {
 
 
     return Scaffold(
+      appBar: appBarDefault(),
       body: Center(child: OutlinedButton(
         onPressed: ()
         {
