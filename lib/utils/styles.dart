@@ -43,3 +43,7 @@ final hintStyleLoginButton = GoogleFonts.raleway(
   fontSize: 20,
   color:Colors.black,
 );
+final personCardStyle= GoogleFonts.raleway(
+  fontSize: 18,
+  color:Colors.black,
+);

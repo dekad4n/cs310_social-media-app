@@ -8,6 +8,8 @@ import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
 import 'package:sucial_cs310_project/routes/edit_profile.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
+import 'package:sucial_cs310_project/routes/user_details/followers.dart';
+import 'package:sucial_cs310_project/routes/user_details/following.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/ui/post_tile.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
@@ -55,11 +57,14 @@ class _ProfileViewState extends State<ProfileView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          TextButton(
-                              onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(analytics: widget.analytics, observer: widget.observer, userProfile: userProfile)));
-                              },
-                              child: const Text('Edit Profile')
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: TextButton(
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(analytics: widget.analytics, observer: widget.observer, userProfile: userProfile)));
+                                },
+                                child: const Text('Edit Profile')
+                            ),
                           ),
                           Column(
                             children: [
@@ -78,18 +83,33 @@ class _ProfileViewState extends State<ProfileView> {
                               Text(userProfile.fullName),
                             ],
                           ),
-                          Column(
-                            children: [
-                              Text('XXX following'),
-                              Text('XXX followers')
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Column(
+                              children: [
+                                TextButton(
+                                  onPressed: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Following(analytics: widget.analytics,observer: widget.observer, userProfile: userProfile)));
+                                  },
+                                    child: Text('${userProfile.followingCount} following')
+                                ),
+                                const SizedBox(height: 12.0),
+                                TextButton(
+                                    onPressed: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Followers(analytics: widget.analytics,observer: widget.observer,userProfile: userProfile)));
+                                    },
+                                    child: Text('${userProfile.followerCount} follower')
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Spacer(),
+                          SizedBox(width: MediaQuery.of(context).size.width/8,),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -105,10 +125,12 @@ class _ProfileViewState extends State<ProfileView> {
                               )
                             ],
                           ),
-                          const SizedBox(width: 12,),
-                          Text(userProfile.biography),
-                          const Spacer(),
-                          const SizedBox(width: 40,),
+                          SizedBox(width: MediaQuery.of(context).size.width/6 ,),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Text(userProfile.biography),
+                          ),
+                          SizedBox(width: MediaQuery.of(context).size.width/4,),
                         ],
 
                       ),

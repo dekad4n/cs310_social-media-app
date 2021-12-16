@@ -1,10 +1,7 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
 
 class UsersService{
@@ -19,7 +16,11 @@ class UsersService{
       'biography': '',
       'profilepicture': 'https://firebasestorage.googleapis.com/v0/b/sucial-ff03d.appspot.com/o/user%2Fprofile%2FprofilePic%2Fnopp.png?alt=media&token=eaebea99-fc2d-4ede-893d-070e2d2595b0',
       'fullName': 'unknown',
-      'isSignupDone': false
+      'isSignupDone': false,
+      'followers': [],
+      'following': [],
+      'followerCount': 0,
+      'followingCount': 0
     });
   }
   Future getUser(String userId) async
@@ -77,5 +78,35 @@ class UsersService{
       'fullNameLower': fullName.toLowerCase(),
     });
   }
-
+  followSomeBody(UserProfile crrUser, UserProfile otherUser){
+    // if not private
+    users.doc(crrUser.userId).update(
+      {
+        "following": FieldValue.arrayUnion([otherUser.userId]),
+        "followingCount": crrUser.followingCount +1
+      }
+    );
+    users.doc(otherUser.userId).update(
+        {
+          "followers": FieldValue.arrayUnion([crrUser.userId]),
+          "followerCount": otherUser.followerCount+1
+        }
+    );
+    // TO DO: If private, send request
+  }
+  unFollow(UserProfile crrUser, UserProfile otherUser)
+  {
+    users.doc(crrUser.userId).update(
+        {
+          "following": FieldValue.arrayRemove([otherUser.userId]),
+          "followingCount": crrUser.followingCount - 1
+        }
+    );
+    users.doc(otherUser.userId).update(
+        {
+          "followers": FieldValue.arrayRemove([crrUser.userId]),
+          "followerCount": otherUser.followerCount-1
+        }
+    );
+  }
 }

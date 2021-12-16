@@ -25,7 +25,25 @@ AppBar appBarDefault(){
     backgroundColor: AppColors.moreDarkerBackground,
   );
 }
-
+AppBar appBarBack(BuildContext context, String appBarTitle){
+  return AppBar(
+    leading: Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: IconButton(
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
+    ),
+    title: Text(
+      appBarTitle,
+      style: sucialStylemMed,
+    ),
+    centerTitle: true,
+    backgroundColor: AppColors.moreDarkerBackground,
+  );
+}
 
 BottomNavigationBar bottomNavBar(BuildContext context)
 {
