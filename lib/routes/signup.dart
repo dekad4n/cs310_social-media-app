@@ -15,9 +15,10 @@ import 'package:sucial_cs310_project/utils/styles.dart';
 
 
 class Signup extends StatefulWidget {
+  const Signup({Key? key, required this.analytics, required this.observer}) : super(key: key);
+
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
-  const Signup({Key? key, required this.analytics, required this.observer}) : super(key: key);
   @override
   _SignupState createState() => _SignupState();
 }
