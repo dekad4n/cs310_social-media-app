@@ -39,7 +39,15 @@ final sucialStylemMed = GoogleFonts.dancingScript(
   fontSize: 32,
   color: AppColors.sucialColor,
 );
+final sucialStylemSmall = GoogleFonts.raleway(
+  fontSize: 24,
+  color: AppColors.sucialColor,
+);
 final hintStyleLoginButton = GoogleFonts.raleway(
   fontSize: 20,
+  color:Colors.black,
+);
+final personCardStyle= GoogleFonts.raleway(
+  fontSize: 18,
   color:Colors.black,
 );

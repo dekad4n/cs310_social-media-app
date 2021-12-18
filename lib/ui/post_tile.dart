@@ -21,11 +21,11 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       shadowColor: Colors.grey,
       elevation: 8,
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -46,11 +46,11 @@ class PostTile extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: delete,
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     iconSize: 14,
                     splashRadius: 24,
                     color: Colors.red,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete,
                     ),
                   ),
@@ -62,13 +62,12 @@ class PostTile extends StatelessWidget {
               children: [
                 Text(
                   post.date,
-
                 ),
 
-                Spacer(),
+                const Spacer(),
                 TextButton.icon(
                   onPressed: incrementDislike,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.thumb_down,
                     color: Colors.blueAccent,
                     size: 14,
@@ -79,11 +78,11 @@ class PostTile extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(width: 16,),
+                const SizedBox(width: 16,),
 
                 TextButton.icon(
                   onPressed: incrementLike,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.thumb_up,
                     color: Colors.blueAccent,
                     size: 14,
@@ -94,11 +93,11 @@ class PostTile extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(width: 16,),
+                const SizedBox(width: 16,),
 
                 TextButton.icon(
                   onPressed: incrementComment,
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.comment,
                     color: Colors.blueAccent,
                     size: 14,
@@ -109,7 +108,8 @@ class PostTile extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(width: 16,),
+                const SizedBox(width: 16,)
+
 
 
               ],
