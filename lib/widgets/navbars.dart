@@ -1,13 +1,24 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sucial_cs310_project/model/post.dart';
+import 'package:sucial_cs310_project/routes/add_post.dart';
+import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
 
-AppBar appBarDefault(){
+
+
+AppBar appBarDefault(BuildContext context){
   return AppBar(
     leading: Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: IconButton(
-        onPressed: (){},
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddPost()));
+        },
         icon: const Icon(Icons.add),
       ),
     ),

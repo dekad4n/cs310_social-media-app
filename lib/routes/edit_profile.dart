@@ -55,7 +55,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      appBar: appBarDefault(),
+      appBar: appBarDefault(context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,6 +120,9 @@ class _EditProfileState extends State<EditProfile> {
                               if (value != null) {
                                 fullName = value;
                               }
+                              else{
+                                fullName = widget.userProfile.fullName;
+                              }
                             },
 
                           ),
@@ -149,6 +152,9 @@ class _EditProfileState extends State<EditProfile> {
                             onSaved: (value) {
                               if (value != null) {
                                 biography = value;
+                              }
+                              else{
+                                biography = widget.userProfile.biography;
                               }
                             },
 
@@ -251,11 +257,11 @@ class _EditProfileState extends State<EditProfile> {
                               }
                               _formKey.currentState!.save();
 
-                              if(biography != null) {
+                              if(biography != null && biography != "") {
                                 await _usersService.setBiography(
                                     biography!, widget.userProfile.userId);
                               }
-                              if(fullName != null)
+                              if(fullName !=  null && fullName != "")
                               {
                                 await _usersService.setFullName(
                                     fullName!, widget.userProfile.userId);

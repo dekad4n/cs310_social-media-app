@@ -17,4 +17,24 @@ class Post{
   });
   @override
   String toString() => 'Post: $text\nDate: $date\nLikes: $likeCount\nComments: $commentCount\nDislikes: $dislikeCount';
+  Map<String, dynamic> toJson() =>
+      {
+        'image': image,
+        'text': text,
+        'date': date,
+        'likeCount': likeCount,
+        'commentCount': commentCount,
+        'dislikeCount': dislikeCount,
+      };
+  factory Post.fromMap(Map data){
+    return Post(
+      image: data['image'],
+      text: data['text'],
+      date: data['date'],
+      likeCount: data['likeCount'],
+      commentCount: data['commentCount'],
+      dislikeCount: data['dislikeCount'],
+
+    );
+  }
 }

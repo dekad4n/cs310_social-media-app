@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
 
 class UsersService{
@@ -20,7 +21,8 @@ class UsersService{
       'followers': [],
       'following': [],
       'followerCount': 0,
-      'followingCount': 0
+      'followingCount': 0,
+      'posts': []
     });
   }
   Future getUser(String userId) async
@@ -37,6 +39,12 @@ class UsersService{
 
   Future<String> uploadFile(User? user,File file) async{
     var storageRef = storage.ref().child("user/profile/profilePic/${user!.uid}");
+    var uploadTask = await storageRef.putFile(file);
+    String downloadURL = await uploadTask.ref.getDownloadURL();
+    return downloadURL;
+  }
+  Future<String> uploadPost(User? user,File file) async{
+    var storageRef = storage.ref().child("user/profile/posts/${user!.uid}");
     var uploadTask = await storageRef.putFile(file);
     String downloadURL = await uploadTask.ref.getDownloadURL();
     return downloadURL;
@@ -78,7 +86,8 @@ class UsersService{
       'fullNameLower': fullName.toLowerCase(),
     });
   }
-  followSomeBody(UserProfile crrUser, UserProfile otherUser){
+  followSomeBody(UserProfile crrUser, UserProfile otherUser) async
+  {
     // if not private
     users.doc(crrUser.userId).update(
       {
@@ -92,9 +101,10 @@ class UsersService{
           "followerCount": otherUser.followerCount+1
         }
     );
+
     // TO DO: If private, send request
   }
-  unFollow(UserProfile crrUser, UserProfile otherUser)
+  unFollow(UserProfile crrUser, UserProfile otherUser) async
   {
     users.doc(crrUser.userId).update(
         {
@@ -108,5 +118,18 @@ class UsersService{
           "followerCount": otherUser.followerCount-1
         }
     );
+  }
+  createPost(String userId, Post post) async
+  {
+    users.doc(userId).update(
+      {
+        'posts': FieldValue.arrayUnion([post.toJson()]),
+      }
+    );
+  }
+  deletePost(String userId, Map<String, dynamic> post) async{
+    users.doc(userId).update({
+      "posts": FieldValue.arrayRemove([post])
+    });
   }
 }

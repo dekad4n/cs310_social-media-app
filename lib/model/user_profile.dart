@@ -11,6 +11,7 @@ class UserProfile
   late List<dynamic> following;
   late int followerCount;
   late int followingCount;
+  List<dynamic> posts;
 
   UserProfile({
     required this.username,
@@ -22,6 +23,7 @@ class UserProfile
     required this.following,
     required this.followerCount,
     required this.followingCount,
+    required this.posts,
   });
 
   factory UserProfile.fromMap(Map data){
@@ -35,6 +37,7 @@ class UserProfile
         following: data['following'],
         followerCount: data['followerCount'],
         followingCount: data['followingCount'],
+        posts:  data["posts"]
     );
   }
 }

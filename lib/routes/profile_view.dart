@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/src/list_extensions.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +38,7 @@ class _ProfileViewState extends State<ProfileView> {
     final user = Provider.of<User?>(context);
     if(user != null) {
       return Scaffold(
-        appBar: appBarDefault(),
+        appBar: appBarDefault(context),
         body: FutureBuilder<DocumentSnapshot>(
           future: usersService.users.doc(user.uid).get(),
           builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
@@ -89,14 +90,14 @@ class _ProfileViewState extends State<ProfileView> {
                               children: [
                                 TextButton(
                                   onPressed: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Following(analytics: widget.analytics,observer: widget.observer, userProfile: userProfile)));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Following(analytics: widget.analytics,observer: widget.observer, userId: userProfile.userId)));
                                   },
                                     child: Text('${userProfile.followingCount} following')
                                 ),
                                 const SizedBox(height: 12.0),
                                 TextButton(
                                     onPressed: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Followers(analytics: widget.analytics,observer: widget.observer,userProfile: userProfile)));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Followers(analytics: widget.analytics,observer: widget.observer,userId: userProfile.userId)));
                                     },
                                     child: Text('${userProfile.followerCount} follower')
                                 ),
@@ -141,12 +142,13 @@ class _ProfileViewState extends State<ProfileView> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
-                          children: myPosts.map(
+                          children: userProfile.posts.map(
                                   (post) => PostTile(
-                                  post: post,
+                                  post: Post.fromMap(post),
                                   delete: ()
                                   {
                                     setState(() {
+                                      usersService.deletePost(user.uid, post);
                                       myPosts.remove(post);
                                     });
                                   },
