@@ -84,7 +84,7 @@ class AppBase extends StatelessWidget {
           '/signup': (context) => Signup(analytics: analytics, observer: observer),
           '/welcome': (context) => Welcome(analytics: analytics, observer: observer),
           '/feed': (context) => FeedView(analytics: analytics, observer: observer),
-          '/search_page': (context) => SearchPage2(),
+          '/search_page': (context) => SearchPage2(analytics: analytics, observer: observer),
           '/signup_followup': (context) => SignUpFollowUp(analytics: analytics, observer: observer),
         },
 
