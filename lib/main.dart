@@ -9,6 +9,7 @@ import 'package:sucial_cs310_project/routes/login.dart';
 import 'package:sucial_cs310_project/routes/signup.dart';
 import 'package:sucial_cs310_project/routes/welcome.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
+import 'package:sucial_cs310_project/routes/notification.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
@@ -72,13 +73,14 @@ class AppBase extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/walkthrough',
+        initialRoute: '/notification',
         routes: {
           '/walkthrough': (context) => WalkThrough(analytics: analytics, observer: observer),
           '/login': (context) => Login(analytics: analytics, observer: observer),
           '/signup': (context) => Signup(analytics: analytics, observer: observer),
           '/welcome': (context) => Welcome(analytics: analytics, observer: observer),
           '/feed': (context) => FeedView(analytics: analytics, observer: observer),
+          '/notification': (context) => Notifications(),
         },
 
       ),

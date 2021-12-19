@@ -1,0 +1,16 @@
+{
+  "notifications": [
+    {
+      "name": "nesWWxd",
+      "profilePic": "TEXT",
+      "content": " liked your post. ",
+      "timeAgo": "20s"
+    },
+    {
+      "name":  "mWWW",
+      "profilePic":  "TEXT",
+      "content":  " started following you. ",
+      "timeAgo":  "1m"
+    }
+  ]
+}
