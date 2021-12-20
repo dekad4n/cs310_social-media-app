@@ -1,19 +1,25 @@
 
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:sucial_cs310_project/routes/user_details/other_user.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 
 
 class SearchCard extends StatelessWidget {
   final String username;
   final String profilePic;
-
-  const SearchCard({Key? key, required this.username, required this.profilePic}) : super(key: key);
+  final String userId;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  const SearchCard({Key? key,required this.analytics, required this.observer, required this.username, required this.profilePic, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: (){
         // TO DO : GO TO THAT PROFILE
+        Navigator.push(context, MaterialPageRoute(builder: (context) => OtherUser(analytics: analytics, observer: observer, otherUserId: userId,)));
       },
       child: Card(
         color: AppColors.backgroundColor,

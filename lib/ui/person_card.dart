@@ -60,7 +60,7 @@ class _PersonCardState extends State<PersonCard> {
                     ElevatedButton(
                         onPressed: (){
                           setState(() {
-                            userService.unFollow(widget.userProfile,otherUserProfile);
+                            userService.unFollow(widget.userProfile.userId,otherUserProfile.userId);
                           });
                         },
                         child: const Text("Unfollow")

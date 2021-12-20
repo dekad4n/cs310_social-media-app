@@ -48,7 +48,7 @@ class _SearchPageState2 extends State<SearchPage2> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: StreamBuilder<QuerySnapshot>(
-        stream: userService.snapshots().asBroadcastStream(),
+        stream: userService.users.snapshots().asBroadcastStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)  {
           return SingleChildScrollView(
             child: Center(
@@ -83,8 +83,13 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   .toString().contains(
                                   searchController.text.toLowerCase()))
                           .map((QueryDocumentSnapshot<Object?> data) =>
-                          SearchCard(username: data['username'],
-                              profilePic: data['profilepicture'])).toList(),
+                          SearchCard(
+                              analytics: widget.analytics,
+                              observer: widget.observer,
+                              username: data['username'],
+                              profilePic: data['profilepicture'],
+                              userId: data['userId'],
+                          )).toList(),
                     )
                 ],
               ),

@@ -9,14 +9,15 @@ class PostTile extends StatelessWidget {
   final VoidCallback incrementLike;
   final VoidCallback incrementComment;
   final VoidCallback incrementDislike;
+  final bool isOther;
 
   const PostTile({
     required this.post,
+    required this.isOther,
     required this.delete,
     required this.incrementLike,
     required this.incrementComment,
     required this.incrementDislike,
-
   });
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,6 @@ class PostTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-
             if (post.image != null) Image.network(
               post.image!,
               width: MediaQuery.of(context).size.width * 0.4,
@@ -39,21 +39,20 @@ class PostTile extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 children: [
-
-
                   Text(
                     post.text,
                   ),
-                  IconButton(
-                    onPressed: delete,
-                    padding: const EdgeInsets.all(0),
-                    iconSize: 14,
-                    splashRadius: 24,
-                    color: Colors.red,
-                    icon: const Icon(
-                      Icons.delete,
+                  if(!isOther)
+                    IconButton(
+                      onPressed: delete,
+                      padding: const EdgeInsets.all(0),
+                      iconSize: 14,
+                      splashRadius: 24,
+                      color: Colors.red,
+                      icon: const Icon(
+                        Icons.delete,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -104,14 +103,9 @@ class PostTile extends StatelessWidget {
                   ),
                   label: Text(
                     ' x ${post.commentCount}',
-
                   ),
                 ),
-
                 const SizedBox(width: 16,)
-
-
-
               ],
             ),
           ],

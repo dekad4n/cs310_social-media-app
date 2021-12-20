@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/src/list_extensions.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,8 +12,6 @@ import 'package:sucial_cs310_project/routes/user_details/followers.dart';
 import 'package:sucial_cs310_project/routes/user_details/following.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/ui/post_tile.dart';
-import 'package:sucial_cs310_project/utils/colors.dart';
-import 'package:sucial_cs310_project/utils/styles.dart';
 import 'package:sucial_cs310_project/widgets/navbars.dart';
 
 class ProfileView extends StatefulWidget {
@@ -26,11 +23,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  int count = 0;
-  List<Post> myPosts = [
-    Post(text: 'Hello Sadi', date: '10.12.2021', dislikeCount:0,likeCount: 0, commentCount: 0),
-    Post(image: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',text: 'Hello Sadi', date: '10.12.2021', dislikeCount:0,likeCount: 0, commentCount: 0),
-  ];
+
   UsersService usersService = UsersService();
 
   @override
@@ -92,14 +85,14 @@ class _ProfileViewState extends State<ProfileView> {
                                   onPressed: (){
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => Following(analytics: widget.analytics,observer: widget.observer, userId: userProfile.userId)));
                                   },
-                                    child: Text('${userProfile.followingCount} following')
+                                    child: Text('${userProfile.following.length} following')
                                 ),
                                 const SizedBox(height: 12.0),
                                 TextButton(
                                     onPressed: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => Followers(analytics: widget.analytics,observer: widget.observer,userId: userProfile.userId)));
                                     },
-                                    child: Text('${userProfile.followerCount} follower')
+                                    child: Text('${userProfile.followers.length} follower')
                                 ),
                               ],
                             ),
@@ -149,9 +142,10 @@ class _ProfileViewState extends State<ProfileView> {
                                   {
                                     setState(() {
                                       usersService.deletePost(user.uid, post);
-                                      myPosts.remove(post);
+                                      //myPosts.remove(post);
                                     });
                                   },
+                                  isOther: false,
                                   incrementLike:(){
                                     setState(() {
                                       post.likeCount++;
