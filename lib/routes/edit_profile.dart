@@ -44,13 +44,16 @@ class _EditProfileState extends State<EditProfile> {
       // TO DO
     }
   }
+  bool isPrivate = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     oldPassword.text = "";
+    isPrivate = widget.userProfile.isPrivate;
 
   }
+  Widget buildSwitch() => Switch.adaptive(value: isPrivate, onChanged: (value) => setState(() => isPrivate = value));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,11 +63,22 @@ class _EditProfileState extends State<EditProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: (){
-                Navigator.of(context).pop();
-              },
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: (){
+                    Navigator.of(context).pop();
+                  },
+                ),
+                const Spacer(),
+                const Icon(Icons.lock_open),
+
+                buildSwitch(),
+                const Icon(Icons.lock),
+
+
+              ]
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
@@ -266,6 +280,7 @@ class _EditProfileState extends State<EditProfile> {
                                 await _usersService.setFullName(
                                     fullName!, widget.userProfile.userId);
                               }
+                              _usersService.updatePrivacy(widget.userProfile.userId, isPrivate);
                               if(!tryAgain) {
                                 Navigator.pushNamed(context, '/profile');
                               }

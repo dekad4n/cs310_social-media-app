@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
 
@@ -20,9 +21,9 @@ class UsersService{
       'isSignupDone': false,
       'followers': [],
       'following': [],
-      'followerCount': 0,
-      'followingCount': 0,
-      'posts': []
+      'posts': [],
+      'requests': [],
+      'isPrivate': false
     });
   }
   Future getUser(String userId) async
@@ -66,6 +67,20 @@ class UsersService{
       }
     return true;
   }
+  Future<bool> doesFollow(String userId, String otherUserId) async
+  {
+    var docRef = await users.doc(userId).get();
+    var obj = docRef.data() as Map<String, dynamic>;
+    var following = obj["following"];
+    return following.contains(otherUserId);
+  }
+  Future<bool> hasFollower(String userId, String otherUserId) async
+  {
+    var docRef = await users.doc(otherUserId).get();
+    var obj = docRef.data() as Map<String, dynamic>;
+    var following = obj["followers"];
+    return following.contains(userId);
+  }
   void doesUsernameExistIn(String username) async{
     doesUsernameExist = await _doesUsernameExist(username);
   }
@@ -86,36 +101,48 @@ class UsersService{
       'fullNameLower': fullName.toLowerCase(),
     });
   }
-  followSomeBody(UserProfile crrUser, UserProfile otherUser) async
+  removeRequest(String requesterId, String requestedId) async
+  {
+    users.doc(requestedId).update(
+        {
+          "requests": FieldValue.arrayRemove([requesterId]),
+        }
+    );
+  }
+  followSomeBody(String crrUserId, String otherUserId, bool isPrivate) async
   {
     // if not private
-    users.doc(crrUser.userId).update(
-      {
-        "following": FieldValue.arrayUnion([otherUser.userId]),
-        "followingCount": crrUser.followingCount +1
-      }
-    );
-    users.doc(otherUser.userId).update(
-        {
-          "followers": FieldValue.arrayUnion([crrUser.userId]),
-          "followerCount": otherUser.followerCount+1
-        }
-    );
-
-    // TO DO: If private, send request
+    if(!isPrivate) {
+      users.doc(crrUserId).update(
+          {
+            "following": FieldValue.arrayUnion([otherUserId]),
+          }
+      );
+      users.doc(otherUserId).update(
+          {
+            "followers": FieldValue.arrayUnion([crrUserId]),
+          }
+      );
+    }
+    else{
+      // TO DO: If private, send request
+      users.doc(otherUserId).update(
+          {
+            "requests": FieldValue.arrayUnion([crrUserId]),
+          }
+      );
+    }
   }
-  unFollow(UserProfile crrUser, UserProfile otherUser) async
+  unFollow(String crrUserId, String otherUserId) async
   {
-    users.doc(crrUser.userId).update(
+    users.doc(crrUserId).update(
         {
-          "following": FieldValue.arrayRemove([otherUser.userId]),
-          "followingCount": crrUser.followingCount - 1
+          "following": FieldValue.arrayRemove([otherUserId]),
         }
     );
-    users.doc(otherUser.userId).update(
+    users.doc(otherUserId).update(
         {
-          "followers": FieldValue.arrayRemove([crrUser.userId]),
-          "followerCount": otherUser.followerCount-1
+          "followers": FieldValue.arrayRemove([crrUserId]),
         }
     );
   }
@@ -130,6 +157,11 @@ class UsersService{
   deletePost(String userId, Map<String, dynamic> post) async{
     users.doc(userId).update({
       "posts": FieldValue.arrayRemove([post])
+    });
+  }
+  updatePrivacy(String userId, bool isPrivate) async{
+    users.doc(userId).update({
+      "isPrivate": isPrivate
     });
   }
 }

@@ -4,8 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/search_page.dart';
-import 'package:sucial_cs310_project/routes/edit_profile.dart';
-//import 'package:sucial_cs310_project/routes/SearchPage.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
 import 'package:sucial_cs310_project/routes/profile_view.dart';
 import 'package:sucial_cs310_project/routes/signup_followup.dart';
