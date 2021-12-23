@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/ui/search_card.dart';
@@ -27,50 +24,47 @@ class _SearchPageState2 extends State<SearchPage2> {
     super.initState();
     searchController.addListener(_onSearchChanged);
   }
-  @override
-  void dispose(){
-    searchController.removeListener(_onSearchChanged);
-    searchController.dispose();
-    super.dispose();
-  }
-  _onSearchChanged( ){
-
-  }
-  buildSearchResults(){
-
-  }
 
   @override
   Widget build(BuildContext context) {
 
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait; // bu dingil ne demek
     // TODO: implement build
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: StreamBuilder<QuerySnapshot>(
-        stream: userService.snapshots().asBroadcastStream(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)  {
-          return SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40,),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: TextFormField(
-                      controller: searchController,
-                      decoration: InputDecoration(
-                        hintText: "Search Something.....",
-                        fillColor: Colors.white,
-                        filled: true,
-                        prefixIcon: const Icon(
-                          Icons.search,
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: clearSearch,
-                        ),
-                      ),
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          FloatingSearchBar(
+            controller: controller,
+            body: FloatingSearchBarScrollNotifier( // is to list the result of a search
+              child: Text(
+                'results',
+                style: TextStyle(
+                  fontSize: 18,
+                  backgroundColor: Colors.white,
+                ),
+              )
+            ),
+            hint: 'Search...',
+            scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
+            transitionCurve: Curves.easeInOut,
+            physics: const BouncingScrollPhysics(), // // Bouncing physics for the search history
+            axisAlignment: isPortrait ? 0.0 : -1.0,
+            openAxisAlignment: 0.0,
+            width: isPortrait ? 600 : 500,
+            debounceDelay: const Duration(milliseconds: 500),
+
+            transition: ExpandingFloatingSearchBarTransition(), // transition sekli
+            actions: [
+              FloatingSearchBarAction(  // Floating search bar ustundeki iconu ayarlıyor basmadan once nasıl gozukuyor
+                showIfOpened: false,
+                child: CircularButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {},
+                ),
+              ),
 
                     ),
                   ),
@@ -94,11 +88,6 @@ class _SearchPageState2 extends State<SearchPage2> {
 
         ),
       bottomNavigationBar: bottomNavBar(context),
-
     );
-  }
-
-  void clearSearch() {
-    searchController.clear();
   }
 }
