@@ -25,7 +25,7 @@ class _FollowersState extends State<Followers> {
   @override
   Widget build(BuildContext context) {
 
-    return StreamBuilder(
+      return StreamBuilder(
         stream: widget.userService.users.doc(widget.userId).snapshots(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot)
         {
@@ -39,7 +39,6 @@ class _FollowersState extends State<Followers> {
                       PersonCard(
                         userProfile: userProfile,
                         otherUser: otherProfile,
-
                       )
                   ).toList(),
                 )

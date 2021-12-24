@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
+import 'package:sucial_cs310_project/routes/comments.dart';
 import 'package:sucial_cs310_project/routes/edit_profile.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
 import 'package:sucial_cs310_project/routes/user_details/followers.dart';
@@ -31,7 +32,7 @@ class _ProfileViewState extends State<ProfileView> {
     final user = Provider.of<User?>(context);
     if(user != null) {
       return Scaffold(
-        appBar: appBarDefault(context),
+        appBar: appBarSignOut(context),
         body: FutureBuilder<DocumentSnapshot>(
           future: usersService.users.doc(user.uid).get(),
           builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
@@ -148,17 +149,17 @@ class _ProfileViewState extends State<ProfileView> {
                                   isOther: false,
                                   incrementLike:(){
                                     setState(() {
-                                      post.likeCount++;
+                                      // TO DO: PUSH NOTIFICATION
+
                                     });
                                   },
                                   incrementComment: (){
-                                    setState((){
-                                      post.commentCount++;
-                                    });
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsView(comments: post["comments"])));
                                   },
                                   incrementDislike: (){
                                     setState((){
-                                      post.dislikeCount++;
+                                      // TO DO: PUSH NOTIFICATION
+
                                     });
                                   }
                               )
@@ -170,7 +171,7 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               );
             }
-            return const Center(child: Text('Loading...'),);
+            return const Center(child: CircularProgressIndicator());
           },
         ),
         bottomNavigationBar: bottomNavBar(context),

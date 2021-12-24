@@ -9,7 +9,7 @@ import 'package:sucial_cs310_project/model/user_profile.dart';
 class UsersService{
   final CollectionReference users = FirebaseFirestore.instance.collection('users');
   final FirebaseStorage storage = FirebaseStorage.instance;
-  bool doesUsernameExist = false;
+  bool doesUsernameExists = false;
   Future addUser(String username, String? userId) async{
     await users.doc(userId).set({
       'username': username,
@@ -23,7 +23,9 @@ class UsersService{
       'following': [],
       'posts': [],
       'requests': [],
-      'isPrivate': false
+      'isPrivate': false,
+      'notifications': [],
+      'isThereNewNotif': false
     });
   }
   Future getUser(String userId) async
@@ -56,16 +58,23 @@ class UsersService{
     setProfilePic(url, user!.uid);
 
   }
-  Future<bool> _doesUsernameExist(String username) async
+  // Bu yanlis olmali
+  Future<bool> doesUsernameExist(String username) async
   {
-    var docRef = users.doc('username');
-    var doc = await docRef.get();
+    final QuerySnapshot result = await users
+        .where('username', isEqualTo: username)
+        .limit(1)
+        .get();
+    final List<DocumentSnapshot> documents = result.docs;
+    return documents.length == 1;
 
-    if(!doc.exists)
-      {
-        return false;
-      }
-    return true;
+  }
+  Future<String> getUsername(String userId) async
+  {
+    var docRef = await users.doc(userId).get();
+    var obj = docRef.data() as Map<String, dynamic>;
+    var username = obj["username"];
+    return username;
   }
   Future<bool> doesFollow(String userId, String otherUserId) async
   {
@@ -82,7 +91,8 @@ class UsersService{
     return following.contains(userId);
   }
   void doesUsernameExistIn(String username) async{
-    doesUsernameExist = await _doesUsernameExist(username);
+    doesUsernameExists = await doesUsernameExist(username);
+    print("does username exist: $doesUsernameExist");
   }
   setProfilePic(String url, String userId) async{
     users.doc(userId).update({
@@ -109,10 +119,21 @@ class UsersService{
         }
     );
   }
+
+  pushNotifications(String crrUserId, String otherUserId,String message) async
+  {
+    users.doc(otherUserId).update(
+        {
+          "notifications": FieldValue.arrayUnion([[crrUserId, message]]),
+          "isThereNewNotif": true
+        }
+    );
+  }
   followSomeBody(String crrUserId, String otherUserId, bool isPrivate) async
   {
     // if not private
     if(!isPrivate) {
+      // TO DO: PUSH NOTIFICATION
       users.doc(crrUserId).update(
           {
             "following": FieldValue.arrayUnion([otherUserId]),
@@ -129,6 +150,7 @@ class UsersService{
       users.doc(otherUserId).update(
           {
             "requests": FieldValue.arrayUnion([crrUserId]),
+            // TO DO: PUSH NOTIFICATION AS REQUEST
           }
       );
     }
@@ -146,6 +168,7 @@ class UsersService{
         }
     );
   }
+  // POSTS
   createPost(String userId, Post post) async
   {
     users.doc(userId).update(
@@ -158,6 +181,75 @@ class UsersService{
     users.doc(userId).update({
       "posts": FieldValue.arrayRemove([post])
     });
+  }
+
+  likePost(String userId, String otherUserId, int postId) async
+  {
+    var docRef = await users.doc(otherUserId).get();
+    var posts = (docRef.data() as Map<String, dynamic>)["posts"];
+    var thePost = posts[0];
+    int i = 0;
+    for(; i < posts.length ; i++)
+      {
+        if(postId == posts[i]["postId"])
+          {
+            thePost = posts[i];
+            break;
+          }
+      }
+    if(!thePost["likes"].contains(userId)) {
+      thePost["likes"] = thePost["likes"] + [userId];
+      posts[i] = thePost;
+      users.doc(otherUserId).update({
+        "posts": posts
+      });
+    }
+    else{
+      thePost["likes"].remove(userId);
+      posts[i] = thePost;
+      users.doc(otherUserId).update({
+        "posts": posts
+      });
+    }
+
+  }
+  dislikePost(String userId, String otherUserId, int postId) async
+  {
+    var docRef = await users.doc(otherUserId).get();
+    var posts = (docRef.data() as Map<String, dynamic>)["posts"];
+    var thePost = posts[0];
+    int i = 0;
+    for(; i < posts.length ; i++)
+    {
+      if(postId == posts[i]["postId"])
+      {
+        thePost = posts[i];
+        break;
+      }
+    }
+    if(!thePost["dislikes"].contains(userId)) {
+      thePost["dislikes"] = thePost["dislikes"] + [userId];
+      posts[i] = thePost;
+      users.doc(otherUserId).update({
+        "posts": posts
+      });
+    }
+    else{
+      thePost["dislikes"].remove(userId);
+      posts[i] = thePost;
+      users.doc(otherUserId).update({
+        "posts": posts
+      });
+    }
+
+  }
+
+  Future<int> getPostCount(String userId) async
+  {
+    var docRef = await users.doc(userId).get();
+    var obj = docRef.data() as Map<String, dynamic>;
+    var len = obj["posts"].length;
+    return len;
   }
   updatePrivacy(String userId, bool isPrivate) async{
     users.doc(userId).update({

@@ -12,6 +12,7 @@ import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
+import 'package:sucial_cs310_project/widgets/alert.dart';
 
 
 class Signup extends StatefulWidget {
@@ -178,10 +179,7 @@ class _SignupState extends State<Signup> {
                                   if (trimmedValue.isEmpty) {
                                     return 'Username field cannot be empty';
                                   }
-                                  usersService.doesUsernameExistIn(uname);
-                                  if (usersService.doesUsernameExist) {
-                                    return 'Username is already in use!';
-                                  }
+
                                 }
                                 return null;
                               },
@@ -311,9 +309,16 @@ class _SignupState extends State<Signup> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
-                                  _auth.signupWithMailAndPass(
-                                      mail, pass.text, uname);
-                                  setuserId(widget.analytics, uname);
+                                  bool doesExist = await usersService.doesUsernameExist(uname);
+                                  if (doesExist) {
+                                    showAlertScreen(context, "Username error", "username is already in use");
+                                  }
+                                  else{
+                                    _auth.signupWithMailAndPass(
+                                        mail, pass.text, uname);
+                                    setuserId(widget.analytics, uname);
+                                  }
+
 
                                 }
                               },

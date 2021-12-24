@@ -11,8 +11,6 @@ class UserProfile
   late List<dynamic> followers;
   late List<dynamic> following;
   late List<dynamic> requests;
-
-
   List<dynamic> posts;
 
   UserProfile({
