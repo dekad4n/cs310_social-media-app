@@ -32,6 +32,11 @@ class UsersService{
   {
     var crrGet = await users.doc(userId).get();
   }
+  Future getUserName(String userId) async
+  {
+    var crrGet = await users.doc(userId).get();
+    return crrGet.get("username");
+  }
   Future isSignupDone(String userId) async{
     bool? dynamicNested;
     users.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
@@ -120,11 +125,15 @@ class UsersService{
     );
   }
 
-  pushNotifications(String crrUserId, String otherUserId,String message) async
+
+
+  pushNotifications(String crrUserId, String otherUserId, String message) async
   {
+    // var crrGet = await users.doc(crrUserId);
+    String current = await getUserName(crrUserId);
     users.doc(otherUserId).update(
         {
-          "notifications": FieldValue.arrayUnion([[crrUserId, message]]),
+          "notifications": FieldValue.arrayUnion([current + message]),
           "isThereNewNotif": true
         }
     );
@@ -144,13 +153,15 @@ class UsersService{
             "followers": FieldValue.arrayUnion([crrUserId]),
           }
       );
+      pushNotifications(crrUserId, otherUserId, " started following you.");
     }
     else{
+      String current = await getUserName(crrUserId);
       // TO DO: If private, send request
       users.doc(otherUserId).update(
           {
-            "requests": FieldValue.arrayUnion([crrUserId]),
             // TO DO: PUSH NOTIFICATION AS REQUEST
+            "requests": FieldValue.arrayUnion([current]),
           }
       );
     }

@@ -168,13 +168,14 @@ class _OtherUserState extends State<OtherUser> {
                               isOther: true,
                               delete: () {},
                               incrementLike: (){
-
+                                usersService.pushNotifications(user.uid, userProfile.userId, " liked your post.");
                               },
                               incrementComment: (){
 
                               },
                               incrementDislike: (){
 
+                                usersService.pushNotifications(user.uid, userProfile.userId, " disliked your post.");
                               },
 
                             )

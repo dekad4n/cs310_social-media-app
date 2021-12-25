@@ -150,6 +150,8 @@ class _ProfileViewState extends State<ProfileView> {
                                   incrementLike:(){
                                     setState(() {
                                       // TO DO: PUSH NOTIFICATION
+                                      // post.likeCount++;
+                                      usersService.pushNotifications(user.uid, userProfile.userId, " liked your post.");
 
                                     });
                                   },
@@ -158,8 +160,11 @@ class _ProfileViewState extends State<ProfileView> {
                                   },
                                   incrementDislike: (){
                                     setState((){
+
                                       // TO DO: PUSH NOTIFICATION
 
+                                      usersService.pushNotifications(user.uid, userProfile.userId, " disliked your post.");
+                                      //post.dislikeCount++;
                                     });
                                   }
                               )
