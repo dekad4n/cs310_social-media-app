@@ -38,7 +38,6 @@ class _FollowersState extends State<Followers> {
                       PersonCard(
                         userProfile: userProfile,
                         otherUser: otherProfile,
-
                       )
                   ).toList(),
                 )
