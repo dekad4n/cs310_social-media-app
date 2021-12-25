@@ -11,6 +11,7 @@ class PostTile extends StatelessWidget {
   final VoidCallback incrementDislike;
   final bool isOther;
 
+
   const PostTile({
     required this.post,
     required this.isOther,
@@ -30,6 +31,8 @@ class PostTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text("@${post.username}"),
+            const SizedBox(height: 16),
             if (post.image != null) Image.network(
               post.image!,
               width: MediaQuery.of(context).size.width * 0.4,
@@ -102,7 +105,7 @@ class PostTile extends StatelessWidget {
                     size: 14,
                   ),
                   label: Text(
-                    ' x ${post.commentCount}',
+                    ' x ${post.comments.length}',
                   ),
                 ),
                 const SizedBox(width: 16,)

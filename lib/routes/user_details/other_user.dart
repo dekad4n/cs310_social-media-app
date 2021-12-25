@@ -67,7 +67,7 @@ class _OtherUserState extends State<OtherUser> {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: TextButton(
                                 onPressed: (){
-                                  // TO DO : Follow
+                                  // TO DO : PUSH NOTIFS
                                   setState(() {
                                     if(!userProfile.requests.contains(user.uid)) {
                                       usersService.followSomeBody(
