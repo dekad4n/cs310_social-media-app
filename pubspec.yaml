@@ -31,6 +31,7 @@ dependencies:
     sdk: flutter
   email_validator: ^2.0.1
   material_floating_search_bar: ^0.3.6
+  json_annotation: ^4.4.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -49,9 +50,12 @@ dependencies:
   firebase_storage: ^10.2.3
   image_picker: ^0.8.4+4
   cloud_firestore: ^3.1.4
+  firebase_messaging: ^11.2.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.1.1
+  build_runner: ^2.1.5
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -2,7 +2,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:sucial_cs310_project/routes/notification.dart';
 import 'package:sucial_cs310_project/routes/search_page.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
 import 'package:sucial_cs310_project/routes/profile_view.dart';
@@ -14,6 +16,7 @@ import 'package:sucial_cs310_project/routes/welcome.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:sucial_cs310_project/model/user_profile.dart';
 
 
 void main() {
@@ -25,17 +28,22 @@ void main() {
 
 class MyApp extends StatefulWidget {
 
+
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
 
   @override
   void initState()
   {
     super.initState();
+
   }
 
   @override
@@ -84,6 +92,7 @@ class AppBase extends StatelessWidget {
           '/feed': (context) => FeedView(analytics: analytics, observer: observer),
           '/search_page': (context) => SearchPage2(analytics: analytics, observer: observer),
           '/signup_followup': (context) => SignUpFollowUp(analytics: analytics, observer: observer),
+          '/notification': (context) => Notifications(analytics: analytics, observer: observer),
         },
 
       ),
