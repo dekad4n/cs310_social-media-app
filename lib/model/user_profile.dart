@@ -11,6 +11,8 @@ class UserProfile
   late List<dynamic> followers;
   late List<dynamic> following;
   late List<dynamic> requests;
+  late List<dynamic> notifications;
+  late bool isThereNewNotif;
 
 
   List<dynamic> posts;
@@ -25,7 +27,9 @@ class UserProfile
     required this.following,
     required this.posts,
     required this.isPrivate,
-    required this.requests
+    required this.requests,
+    required this.notifications,
+    required this.isThereNewNotif
   });
 
   factory UserProfile.fromMap(Map data){
@@ -39,7 +43,9 @@ class UserProfile
         followers: data['followers'],
         following: data['following'],
         posts:  data["posts"],
-        requests: data["requests"]
+        requests: data["requests"],
+        notifications:  data["notifications"],
+        isThereNewNotif: data["isThereNewNotif"]
     );
   }
 }
