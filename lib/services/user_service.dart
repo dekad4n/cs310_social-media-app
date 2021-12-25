@@ -23,12 +23,19 @@ class UsersService{
       'following': [],
       'posts': [],
       'requests': [],
-      'isPrivate': false
+      'isPrivate': false,
+      'notifications':[],
+      'isThereNewNotif':false
     });
   }
   Future getUser(String userId) async
   {
     var crrGet = await users.doc(userId).get();
+  }
+  Future getUserName(String userId) async
+  {
+    var crrGet = await users.doc(userId).get();
+    return crrGet.get("username");
   }
   Future isSignupDone(String userId) async{
     bool? dynamicNested;
@@ -109,6 +116,20 @@ class UsersService{
         }
     );
   }
+
+  pushNotifications(String crrUserId, String otherUserId, String message) async
+  {
+    // var crrGet = await users.doc(crrUserId);
+    String current = await getUserName(crrUserId);
+    users.doc(otherUserId).update(
+        {
+          "notifications": FieldValue.arrayUnion([current + message]),
+          "isThereNewNotif": true
+        }
+    );
+  }
+
+
   followSomeBody(String crrUserId, String otherUserId, bool isPrivate) async
   {
     // if not private
@@ -123,12 +144,14 @@ class UsersService{
             "followers": FieldValue.arrayUnion([crrUserId]),
           }
       );
+      pushNotifications(crrUserId, otherUserId, " started following you.");
     }
     else{
+      String current = await getUserName(crrUserId);
       // TO DO: If private, send request
       users.doc(otherUserId).update(
           {
-            "requests": FieldValue.arrayUnion([crrUserId]),
+            "requests": FieldValue.arrayUnion([current]),
           }
       );
     }
