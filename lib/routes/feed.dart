@@ -6,12 +6,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/model/post.dart';
+import 'package:sucial_cs310_project/routes/comments.dart';
 import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/ui/post_tile.dart';
 import 'package:sucial_cs310_project/widgets/navbars.dart';
-
 import 'login.dart';
 
 class FeedView extends StatefulWidget {
@@ -75,12 +75,21 @@ class _FeedViewState extends State<FeedView> {
                                           });
                                         },
                                         incrementLike:() async{
-                                            // TO DO: PUSH NOTIFICATION
-                                            usersService.likePost(user.uid, post["userId"], post["postId"]);
+                                          usersService.likePost(user.uid, post["userId"], post["postId"]);
                                         },
                                         incrementComment: (){
-                                          setState((){
-                                          });
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CommentsView(
+                                                          userId: user.uid,
+                                                          otherUserId: post["userId"],
+                                                          postId: post["postId"]
+                                                      )
+                                              )
+                                          );
                                         },
                                         incrementDislike: (){
                                           usersService.dislikePost(user.uid,post["userId"], post["postId"]);

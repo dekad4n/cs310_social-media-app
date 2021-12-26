@@ -20,13 +20,28 @@ class _PersonCardState extends State<PersonCard> {
 
   @override
   Widget build(BuildContext context) {
-
-    return FutureBuilder(
-      future: userService.users.doc(widget.otherUser).get(),
+    return StreamBuilder(
+      stream: userService.users.doc(widget.otherUser).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         if(snapshot.hasData)
           {
             UserProfile otherUserProfile = UserProfile.fromMap(snapshot.data!.data() as Map<String,dynamic>);
+            bool doesFollow = otherUserProfile.followers.contains(widget.userProfile.userId);
+            String buttonWrite = "";
+            if(doesFollow)
+              {
+                buttonWrite = "Unfollow";
+              }
+            else{
+              bool doesRequest = otherUserProfile.requests.contains(widget.userProfile.userId);
+              if(doesRequest)
+                {
+                  buttonWrite = "Requested";
+                }
+              else{
+                buttonWrite = "Follow";
+              }
+            }
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
               shadowColor: AppColors.backgroundColor,
@@ -58,12 +73,23 @@ class _PersonCardState extends State<PersonCard> {
                     ),
                     const Spacer(),
                     ElevatedButton(
-                        onPressed: (){
-                          setState(() {
-                            userService.unFollow(widget.userProfile.userId,otherUserProfile.userId);
-                          });
+                        onPressed: () async{
+                            if(otherUserProfile.followers.contains(widget.userProfile.userId)) {
+                                await userService.unFollow(widget.userProfile.userId,
+                                    otherUserProfile.userId);
+
+                            }
+                            else{
+                              await userService.followSomeBody(widget.userProfile.userId, otherUserProfile.userId, otherUserProfile.isPrivate);
+
+
+
+                            }
+                            print("Other user followers: ${otherUserProfile.followers}");
+                            setState(() {
+                            });
                         },
-                        child: const Text("Unfollow")
+                        child: Text(buttonWrite)
                     ),
                     const SizedBox(width: 16.0,)
                   ],

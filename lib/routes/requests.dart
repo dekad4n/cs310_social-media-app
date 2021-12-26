@@ -46,9 +46,12 @@ class _RequestsState extends State<Requests> {
                   ),
                 ),
                 body: Column(
-                  children: userProfile.requests.map((message) =>
+                  children: userProfile.requests.map((requester) =>
                       requestItem(
-                        userProfile: userProfile
+                        analytics: widget.analytics,
+                        observer: widget.observer,
+                        userId: requester,
+                        mainUser: widget.userId,
                       )
                   ).toList(),
                 )
@@ -66,9 +69,11 @@ class _RequestsState extends State<Requests> {
 }
 
 class requestItem extends StatefulWidget {
-  UserProfile userProfile;
-
-  requestItem({Key? key, required this.userProfile,}) : super(key: key);
+  String userId;
+  String mainUser;
+  final FirebaseAnalyticsObserver observer;
+  final FirebaseAnalytics analytics;
+  requestItem({Key? key, required this.analytics, required this.observer,required this.userId, required this.mainUser}) : super(key: key);
 
   @override
   State<requestItem> createState() => _requestItemState();
@@ -79,42 +84,70 @@ class _requestItemState extends State<requestItem> {
 
   @override
   Widget build(BuildContext context) {
-    String userID = widget.userProfile.userId;
-    String profilepicture = widget.userProfile.profilepicture;
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CircleAvatar(
-            child: ClipOval(
-              child: Image.network(
-                  'https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Free-Image.png'),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                Flexible(
-                    child: TextButton(
-                      child: RichText(text: TextSpan(
-                          children: [
-                            // TextSpan(text: notification.name, style: TextStyle(color: AppColors.sucialColor, fontWeight: FontWeight.bold)),
-                            TextSpan(text: userID + " requested to follow you.",
-                                style: TextStyle(
-                                    color: AppColors.sucialColor)),
-                            // TextSpan(text: notification.timeAgo, style: TextStyle(color: AppColors.explanationColor),)
-                          ]
-                      )),
-                      onPressed: () {},
-                    )
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
+    return FutureBuilder(
+      future: userService.users.doc(widget.userId).get(),
+      builder: (BuildContext context,
+          AsyncSnapshot<DocumentSnapshot> snapshot)
+        {
+          if(snapshot.hasError)
+            {
+              return const Center(child: Text("Error"));
+            }
+          if(snapshot.connectionState == ConnectionState.done) {
+            if(snapshot.data!.data() != null) {
+              UserProfile userProfile = UserProfile.fromMap(
+                  snapshot.data!.data() as Map<String, dynamic>);
+              return Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      child: ClipOval(
+                        child: Image.network(
+                            userProfile.profilepicture),
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Flexible(
+                              child: TextButton(
+                                child: RichText(text: TextSpan(
+                                    children: [
+                                      // TextSpan(text: notification.name, style: TextStyle(color: AppColors.sucialColor, fontWeight: FontWeight.bold)),
+                                      TextSpan(text: userProfile.username +
+                                          " requested to follow you.",
+                                          style: const TextStyle(
+                                              color: AppColors.sucialColor)),
+                                      // TextSpan(text: notification.timeAgo, style: TextStyle(color: AppColors.explanationColor),)
+                                    ]
+                                )),
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => OtherUser(analytics: widget.analytics, observer: widget.observer, otherUserId: widget.userId)));
+                                },
+                              )
+                          ),
+                          TextButton(onPressed: (){
+                            userService.acceptRequest(userProfile.userId, widget.mainUser);
+                            userService.pushNotifications(userProfile.userId, widget.mainUser, "has started following you.");
+                          }, child: const Text('Accept')),
+                          TextButton(onPressed: (){
+                            userService.removeRequest(userProfile.userId, widget.mainUser);
+                          }, child: const Text('Deny')),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return Container();
+          }
+          return CircularProgressIndicator();
+        }
     );
   }
 }

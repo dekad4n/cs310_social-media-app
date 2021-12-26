@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
+import 'package:sucial_cs310_project/routes/comments.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/ui/post_tile.dart';
 import 'package:sucial_cs310_project/widgets/navbars.dart';
@@ -42,14 +43,11 @@ class _OtherUserState extends State<OtherUser> {
 
       return Scaffold(
         appBar: appBarDefault(context),
-        body: FutureBuilder<DocumentSnapshot>(
-          future: usersService.users.doc(widget.otherUserId).get(),
+        body: StreamBuilder<DocumentSnapshot>(
+          stream: usersService.users.doc(widget.otherUserId).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-            if(snapshot.hasError)
-            {
-              return const Center(child: Text("Refresh the page!"));
-            }
-            if(snapshot.connectionState == ConnectionState.done)
+
+            if(snapshot.hasData)
             {
               UserProfile userProfile = UserProfile.fromMap(snapshot.data!.data() as Map<String,dynamic>);
               waiter(user.uid);
@@ -168,14 +166,24 @@ class _OtherUserState extends State<OtherUser> {
                               isOther: true,
                               delete: () {},
                               incrementLike: (){
-                                usersService.pushNotifications(user.uid, userProfile.userId, " liked your post.");
+                                usersService.likePost(user.uid, post["userId"], post["postId"]);
                               },
                               incrementComment: (){
-
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CommentsView(
+                                                userId: user.uid,
+                                                otherUserId: post["userId"],
+                                                postId: post["postId"]
+                                            )
+                                    )
+                                );
                               },
                               incrementDislike: (){
+                                usersService.dislikePost(user.uid, post["userId"], post["postId"]);
 
-                                usersService.pushNotifications(user.uid, userProfile.userId, " disliked your post.");
                               },
 
                             )

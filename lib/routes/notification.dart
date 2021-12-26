@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/requests.dart';
+import 'package:sucial_cs310_project/routes/user_details/other_user.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
@@ -55,37 +56,41 @@ class _NotificationsState extends State<Notifications> {
                             backgroundColor: Colors.deepPurple[100],
                             elevation: 0.0,
                             automaticallyImplyLeading: false,
-                            iconTheme: IconThemeData(color: AppColors.sucialColor),
+                            iconTheme: const IconThemeData(color: AppColors.sucialColor),
                             leading: IconButton(
-                              icon: Icon(Icons.arrow_back, color: AppColors.sucialColor),
+                              icon: const Icon(Icons.arrow_back, color: AppColors.sucialColor),
                               onPressed: () => Navigator.of(context).pop(),
                             ),
                           ),
-                          body: Column(children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: AppColors.sucialColor,
-                              ),
-                              onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Requests(analytics: widget.analytics,observer: widget.observer, userId: userProfile.userId)));
-                              },
-                              child: Row(
-                                children: [
-                                  Text('Follow Requests', style: smallExplanation),
-                                  //const Icon(Icons.arrow_forward, color: AppColors.explanationColor),
-                                ],
-                              )
+                          body: SingleChildScrollView(
+                            child: Column(children: [
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: AppColors.sucialColor,
+                                ),
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => Requests(analytics: widget.analytics,observer: widget.observer, userId: userProfile.userId)));
+                                },
+                                child: Row(
+                                  children: [
+                                    Text('Follow Requests', style: smallExplanation),
+                                    //const Icon(Icons.arrow_forward, color: AppColors.explanationColor),
+                                  ],
+                                )
 
+                              ),
+                              Column(
+                                children: userProfile.notifications.map((message) =>
+                                    NotificationItem(
+                                      analytics: widget.analytics,
+                                      observer: widget.observer,
+                                      otherUserId: message["senderId"],
+                                      context: message["context"],
+                                    )
+                                ).toList(),
+                              )
+                            ]
                             ),
-                            Column(
-                              children: userProfile.notifications.map((message) =>
-                                  notificationItem(
-                                    userProfile: userProfile,
-                                    context: message,
-                                  )
-                              ).toList(),
-                            )
-                          ]
                           ));
                     }
                     return const Scaffold(body: Center(child: Text("Sth went wrong"),),);
@@ -104,55 +109,75 @@ class _NotificationsState extends State<Notifications> {
   }
 }
 
-class notificationItem extends StatefulWidget {
-  final UserProfile userProfile;
+class NotificationItem extends StatefulWidget {
   final String context;
+  final String otherUserId;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
 
-  notificationItem({Key? key, required this.userProfile, required this.context}) : super(key: key);
+  NotificationItem({Key? key, required this.analytics, required this.observer,required this.context,required this.otherUserId}) : super(key: key);
 
   @override
-  State<notificationItem> createState() => _notificationItemState();
+  State<NotificationItem> createState() => _NotificationItemState();
 }
 
-class _notificationItemState extends State<notificationItem> {
+class _NotificationItemState extends State<NotificationItem> {
   UsersService userService = UsersService();
 
   @override
   Widget build(BuildContext context) {
-      return Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CircleAvatar(
-              child: ClipOval(
-                child: Image.network(
-                    'https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Free-Image.png'),
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Flexible(
-                      child: TextButton(
-                        child: RichText(text: TextSpan(
-                            children: [
-                              // TextSpan(text: notification.name, style: TextStyle(color: AppColors.sucialColor, fontWeight: FontWeight.bold)),
-                              TextSpan(text: widget.context,
-                                  style: TextStyle(
-                                      color: AppColors.sucialColor)),
-                              // TextSpan(text: notification.timeAgo, style: TextStyle(color: AppColors.explanationColor),)
-                            ]
-                        )),
-                        onPressed: () {},
-                      )
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
+      return FutureBuilder(
+        future: userService.users.doc(widget.otherUserId).get(),
+        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot)
+          {
+            if(!snapshot.hasError && snapshot.connectionState == ConnectionState.done) {
+              UserProfile userProfile = UserProfile.fromMap(snapshot.data!.data() as Map<String,dynamic>);
+              return Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      radius: 25,
+                      child: ClipOval(
+                        child: Image.network(
+                            userProfile.profilepicture,
+                            fit: BoxFit.cover,
+                            height: 50,
+                            width: 50,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Flexible(
+                              child: TextButton(
+                                child: RichText(text: TextSpan(
+                                    children: [
+                                      TextSpan(text: userProfile.username + " ", style: const TextStyle(color: AppColors.sucialColor, fontWeight: FontWeight.bold)),
+                                      TextSpan(text: widget.context,
+                                          style: const TextStyle(
+                                              color: AppColors.sucialColor)),
+                                      // TextSpan(text: notification.timeAgo, style: TextStyle(color: AppColors.explanationColor),)
+                                    ]
+                                )),
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => OtherUser(analytics: widget.analytics, observer: widget.observer, otherUserId: userProfile.userId)));
+                                },
+                              )
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const CircularProgressIndicator();
+          }
       );
     }
   }
