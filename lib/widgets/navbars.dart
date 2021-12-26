@@ -24,7 +24,9 @@ AppBar appBarDefault(BuildContext context){
     ),
     actions: [
       IconButton(
-          onPressed: (){},
+      onPressed: (){
+      Navigator.pushNamed(context, '/dmbox');
+      },
           icon: const Icon(Icons.send)
       )
     ],

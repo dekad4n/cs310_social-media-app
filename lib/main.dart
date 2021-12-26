@@ -3,6 +3,8 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:sucial_cs310_project/routes/chat/dmbox.dart';
 import 'package:sucial_cs310_project/routes/search_page.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
 import 'package:sucial_cs310_project/routes/profile_view.dart';
@@ -13,6 +15,7 @@ import 'package:sucial_cs310_project/routes/signup.dart';
 import 'package:sucial_cs310_project/routes/welcome.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:provider/provider.dart';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 
@@ -74,7 +77,7 @@ class AppBase extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/welcome',
+        initialRoute: '/dmbox',
         routes: {
           '/profile': (context) => ProfileView(analytics: analytics, observer: observer),
           '/walkthrough': (context) => WalkThrough(analytics: analytics, observer: observer),
@@ -84,6 +87,8 @@ class AppBase extends StatelessWidget {
           '/feed': (context) => FeedView(analytics: analytics, observer: observer),
           '/search_page': (context) => SearchPage2(analytics: analytics, observer: observer),
           '/signup_followup': (context) => SignUpFollowUp(analytics: analytics, observer: observer),
+          '/dmbox': (context)=> ChatsScreen(analytics: analytics, observer: observer),
+
         },
 
       ),
