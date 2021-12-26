@@ -143,29 +143,29 @@ class _ProfileViewState extends State<ProfileView> {
                                   {
                                     setState(() {
                                       usersService.deletePost(user.uid, post);
-                                      //myPosts.remove(post);
                                     });
                                   },
                                   isOther: false,
                                   incrementLike:(){
-                                    setState(() {
-                                      // TO DO: PUSH NOTIFICATION
-                                      // post.likeCount++;
-                                      usersService.pushNotifications(user.uid, userProfile.userId, " liked your post.");
-
-                                    });
+                                      usersService.likePost(user.uid, userProfile.userId, post["postId"]);
                                   },
                                   incrementComment: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => CommentsView(comments: post["comments"])));
+
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CommentsView(
+                                                    userId: user.uid,
+                                                    otherUserId: post["userId"],
+                                                    postId: post["postId"]
+                                                )
+                                        )
+                                    );
                                   },
                                   incrementDislike: (){
-                                    setState((){
+                                    usersService.dislikePost(user.uid, userProfile.userId, post["postId"]);
 
-                                      // TO DO: PUSH NOTIFICATION
-
-                                      usersService.pushNotifications(user.uid, userProfile.userId, " disliked your post.");
-                                      //post.dislikeCount++;
-                                    });
                                   }
                               )
                           ).toList(),

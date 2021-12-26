@@ -124,6 +124,20 @@ class UsersService{
         }
     );
   }
+  acceptRequest(String requesterId, String requestedId) async{
+    users.doc(requestedId).update(
+        {
+          "requests": FieldValue.arrayRemove([requesterId]),
+          "followers": FieldValue.arrayUnion([requesterId])
+        }
+    );
+    users.doc(requesterId).update(
+        {
+          "following": FieldValue.arrayUnion([requestedId])
+        }
+    );
+
+  }
 
 
 
@@ -133,7 +147,10 @@ class UsersService{
     String current = await getUserName(crrUserId);
     users.doc(otherUserId).update(
         {
-          "notifications": FieldValue.arrayUnion([current + message]),
+          "notifications": FieldValue.arrayUnion([{
+            "context": message,
+            "senderId": crrUserId
+          }]),
           "isThereNewNotif": true
         }
     );
@@ -161,7 +178,7 @@ class UsersService{
       users.doc(otherUserId).update(
           {
             // TO DO: PUSH NOTIFICATION AS REQUEST
-            "requests": FieldValue.arrayUnion([current]),
+            "requests": FieldValue.arrayUnion([crrUserId]),
           }
       );
     }
@@ -214,6 +231,7 @@ class UsersService{
       users.doc(otherUserId).update({
         "posts": posts
       });
+      pushNotifications(userId, otherUserId, " liked your post.");
     }
     else{
       thePost["likes"].remove(userId);
@@ -244,6 +262,8 @@ class UsersService{
       users.doc(otherUserId).update({
         "posts": posts
       });
+      pushNotifications(userId, otherUserId, " disliked your post.");
+
     }
     else{
       thePost["dislikes"].remove(userId);
@@ -254,7 +274,28 @@ class UsersService{
     }
 
   }
+  Future<void> sendCommendTo(String userId, String otherUserId, int postId, String context) async
+  {
+    var docRef = await users.doc(otherUserId).get();
+    var posts = (docRef.data() as Map<String, dynamic>)["posts"];
+    var thePost = posts[0];
+    int i = 0;
+    for(; i < posts.length ; i++)
+    {
+      if(postId == posts[i]["postId"])
+      {
+        thePost = posts[i];
+        break;
+      }
+    }
+      thePost["comments"] = thePost["comments"] + [{"senderId": userId, "context": context}];
+      posts[i] = thePost;
+      users.doc(otherUserId).update({
+        "posts": posts
+      });
+      pushNotifications(userId, otherUserId, " commented on your post.");
 
+  }
   Future<int> getPostCount(String userId) async
   {
     var docRef = await users.doc(userId).get();

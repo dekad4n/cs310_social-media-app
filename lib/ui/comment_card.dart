@@ -23,6 +23,7 @@ class _CommentCardState extends State<CommentCard> {
           if(snapshot.hasData)
           {
             var profilePicture = (snapshot.data!.data() as Map<String, dynamic>)["profilepicture"];
+            var username = (snapshot.data!.data() as Map<String, dynamic>)["username"];
             return Card(
               child: Row(
                 children: [
@@ -39,13 +40,22 @@ class _CommentCardState extends State<CommentCard> {
                     radius: 35,
                   ),
                   const SizedBox(width: 16,),
-                  TextButton(
-                    onPressed: (){
-                    },
-                    child: Text(
-                      widget.comment,
-                      style: personCardStyle,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[
+                      Text(
+                          username,
+                          style: personCardStyleBold,
+                      ),
+                      TextButton(
+                        onPressed: (){
+                        },
+                        child: Text(
+                          widget.comment,
+                          style: personCardStyle,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

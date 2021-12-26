@@ -51,3 +51,8 @@ final personCardStyle= GoogleFonts.raleway(
   fontSize: 18,
   color:Colors.black,
 );
+final personCardStyleBold= GoogleFonts.raleway(
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+  color:Colors.black,
+);
