@@ -93,7 +93,7 @@ class _FeedViewState extends State<FeedView> {
                                         },
                                         incrementDislike: (){
                                           usersService.dislikePost(user.uid,post["userId"], post["postId"]);
-                                        }
+                                        },
                                   )
                               ).toList(),
                             )

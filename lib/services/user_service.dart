@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
+import 'package:sucial_cs310_project/services/post_service.dart';
 
 class UsersService{
   final CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -204,11 +205,16 @@ class UsersService{
         'posts': FieldValue.arrayUnion([post.toJson()]),
       }
     );
+    PostService postService = PostService();
+    postService.addPostTo(userId, post);
+
   }
   deletePost(String userId, Map<String, dynamic> post) async{
     users.doc(userId).update({
       "posts": FieldValue.arrayRemove([post])
     });
+    PostService postService = PostService();
+    postService.deletePost(userId, post);
   }
 
   likePost(String userId, String otherUserId, int postId) async
@@ -240,6 +246,8 @@ class UsersService{
         "posts": posts
       });
     }
+    PostService postService = PostService();
+    postService.likePost(userId, otherUserId, postId);
 
   }
   dislikePost(String userId, String otherUserId, int postId) async
@@ -256,6 +264,8 @@ class UsersService{
         break;
       }
     }
+    PostService postService = PostService();
+    postService.dislikePost(userId, otherUserId, postId);
     if(!thePost["dislikes"].contains(userId)) {
       thePost["dislikes"] = thePost["dislikes"] + [userId];
       posts[i] = thePost;
@@ -272,6 +282,7 @@ class UsersService{
         "posts": posts
       });
     }
+
 
   }
   Future<void> sendCommendTo(String userId, String otherUserId, int postId, String context) async
@@ -293,6 +304,8 @@ class UsersService{
       users.doc(otherUserId).update({
         "posts": posts
       });
+    PostService postService = PostService();
+    postService.sendCommendTo(userId, otherUserId, postId,context);
       pushNotifications(userId, otherUserId, " commented on your post.");
 
   }
