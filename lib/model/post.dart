@@ -8,6 +8,7 @@ class Post{
   int likeCount;
   List<dynamic> comments;
   int dislikeCount;
+  bool isDisabled;
 
   Post({
     required this.postId,
@@ -19,6 +20,7 @@ class Post{
     required this.date,
     required this.comments,
     required this.dislikeCount,
+    required this.isDisabled
   });
   @override
   String toString() => 'Post: $text\nDate: $date\nLikes: $likeCount\nComments: $comments\nDislikes: $dislikeCount';
@@ -33,6 +35,7 @@ class Post{
         'likes': [],
         'comments': [],
         'dislikes': [],
+        'isDisabled': isDisabled
       };
   factory Post.fromMap(Map data){
     return Post(
@@ -45,8 +48,7 @@ class Post{
       likeCount: data['likes'].length,
       comments: data['comments'],
       dislikeCount: data['dislikes'].length,
-
-
+      isDisabled: data['isDisabled'] ?? false
     );
   }
 }

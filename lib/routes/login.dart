@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:provider/provider.dart';
+import 'package:sucial_cs310_project/routes/user_details/disabled_screen.dart';
 import 'package:sucial_cs310_project/services/analytics.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
+import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
@@ -24,6 +27,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   AuthService auth = AuthService();
+  UsersService usersService = UsersService();
   final _formKey = GlobalKey<FormState>();
   String mail = "";
   String pass ="";
@@ -164,7 +168,7 @@ class _LoginState extends State<Login> {
                                       fillColor: AppColors.backgroundColor,
                                       filled: true,
                                       hintText: 'Password',
-                                      border: UnderlineInputBorder(),
+                                      border: const UnderlineInputBorder(),
                                     ),
                                     keyboardType: TextInputType.text,
                                     obscureText: true,
@@ -241,7 +245,7 @@ class _LoginState extends State<Login> {
                               primary: AppColors.backgroundColor,
                             ),
                             onPressed: () {
-                              setCurrentScreen(widget.analytics, 'f Login Page', 'login.dart');
+                              auth.signInWithFacebook();
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
@@ -297,7 +301,25 @@ class _LoginState extends State<Login> {
           )
       );
     }else{
-      return FeedView(analytics: widget.analytics, observer: widget.observer);
+      return FutureBuilder(
+          future: usersService.users.doc(user.uid).get(),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot)
+          {
+            if(snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+              bool isDisabled = (snapshot.data!.data() as Map<String,
+                  dynamic>)["isDisabled"];
+              if (isDisabled) {
+                return DisabledScreen();
+              }
+              else {
+                return FeedView(
+                    analytics: widget.analytics, observer: widget.observer);
+              }
+            }
+            return const Center(child: CircularProgressIndicator(),);
+
+          }
+      );
     }
   }
 }
