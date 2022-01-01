@@ -26,13 +26,64 @@ class UsersService{
       'requests': [],
       'isPrivate': false,
       'notifications': [],
-      'isThereNewNotif': false
+      'isThereNewNotif': false,
+      'isDisabled': false
     });
+  }
+  Future deleteUser(String userId) async
+  {
+    users.doc(userId).delete();
+
+  }
+  Future disableUser(String userId) async{
+    await users.doc(userId).update(
+        {
+          'isDisabled': true
+        }
+    );
+    var docRef = await users.doc(userId).get();
+    var posts = (docRef.data() as Map<String, dynamic>)["posts"];
+    int i = 0;
+    PostService postService = PostService();
+    for(; i < posts.length ; i++)
+    {
+      posts[i]["isDisabled"] = true;
+      postService.disablePost(userId + posts[i]['postId'].toString());
+
+
+    }
+    users.doc(userId).update(
+      {
+        'posts': posts
+      }
+    );
+  }
+  Future enableUser(String userId) async{
+    await users.doc(userId).update(
+      {
+        'isDisabled': false
+      }
+    );
+    var docRef = await users.doc(userId).get();
+    var posts = (docRef.data() as Map<String, dynamic>)["posts"];
+    int i = 0;
+    PostService postService = PostService();
+    for(; i < posts.length ; i++)
+    {
+      posts[i]["isDisabled"] = false;
+      postService.enablePost(userId + posts[i]['postId'].toString());
+    }
+    users.doc(userId).update(
+        {
+          'posts': posts
+        }
+    );
   }
   Future getUser(String userId) async
   {
     var crrGet = await users.doc(userId).get();
   }
+
   Future getUserName(String userId) async
   {
     var crrGet = await users.doc(userId).get();

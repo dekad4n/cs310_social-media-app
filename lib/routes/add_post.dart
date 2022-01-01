@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
-import 'package:sucial_cs310_project/widgets/navbars.dart';
 
 class AddPost extends StatefulWidget {
   const AddPost({Key? key}) : super(key: key);
@@ -88,7 +86,7 @@ class _AddPostState extends State<AddPost> {
                             }
                             final timestamp = DateTime.now(); // timestamp in seconds
                             String today = timestamp.year.toString() + "/" +timestamp.month.toString() + "/"+ timestamp.day.toString();
-                            Post post = Post(userId: user.uid,postId: userProfile.posts.length+1,username: userProfile.username,image: imageStr,text: text ?? "", likeCount: 0, date: today.toString(), comments: [], dislikeCount: 0);
+                            Post post = Post(userId: user.uid,postId: userProfile.posts.length+1,username: userProfile.username,image: imageStr,text: text ?? "", likeCount: 0, date: today.toString(), comments: [], dislikeCount: 0, isDisabled: false);
                             userService.createPost(user.uid, post);
                             Navigator.pushNamed(context, '/profile');
                           },
@@ -131,7 +129,7 @@ class _AddPostState extends State<AddPost> {
                   ),
                 );
               }
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
         );
       }

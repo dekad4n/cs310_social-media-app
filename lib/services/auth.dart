@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/widgets/alert.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,6 +14,14 @@ class AuthService{
   }
   Stream<User?> get user{
     return _auth.authStateChanges().map(_userFromFirebase);
+  }
+  Future deleteUser(User user,String email, String password) async{
+    String uid = user.uid;
+    var result = await user.reauthenticateWithCredential(
+        EmailAuthProvider.credential(email: email, password: password));
+    await result.user!.delete();
+    UsersService usersService = UsersService();
+    usersService.deleteUser(uid);
   }
 
   Future signupWithMailAndPass(String mail, String pass, String uname) async{
@@ -69,6 +78,16 @@ class AuthService{
     UserCredential result =  await FirebaseAuth.instance.signInWithCredential(credential);
     User? user =  result.user;
     return _userFromFirebase(user);
+  }
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    // Once signed in, return the UserCredential
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
   }
   Future<bool> changePassword(String crrPass, String newPass) async{
     bool isSuccess = false;

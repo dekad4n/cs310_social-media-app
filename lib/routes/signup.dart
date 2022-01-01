@@ -345,7 +345,10 @@ class _SignupState extends State<Signup> {
                             style: TextButton.styleFrom(
                               primary: AppColors.backgroundColor,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              _auth.signInWithFacebook();
+
+                            },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
                               child: Container(
@@ -371,6 +374,8 @@ class _SignupState extends State<Signup> {
                             ),
                             onPressed: () {
                               _auth.signInWithGoogle();
+                              setuserId(widget.analytics, user!.uid);
+
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,

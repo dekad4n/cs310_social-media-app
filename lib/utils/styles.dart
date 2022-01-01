@@ -21,6 +21,10 @@ final smallExplanation = GoogleFonts.raleway(
   fontSize: 16,
   color: AppColors.explanationColor,
 );
+final mediumExplanation = GoogleFonts.raleway(
+  fontSize: 24,
+  color: AppColors.explanationColor,
+);
 final hintStyleLogin = GoogleFonts.raleway(
   color: Colors.black,
   fontSize: 16,

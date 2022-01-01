@@ -44,6 +44,22 @@ class PostService{
       });
     }
   }
+  Future<void> disablePost(String postId) async
+  {
+    posts.doc(postId).update(
+        {
+          'isDisabled': true
+        }
+    );
+  }
+  Future<void> enablePost(String postId) async
+  {
+    posts.doc(postId).update(
+        {
+          'isDisabled': false
+        }
+    );
+  }
   Future<void> sendCommendTo(String userId, String otherUserId, int postId, String context) async
   {
     var docRef = await posts.doc(otherUserId + postId.toString()).get();

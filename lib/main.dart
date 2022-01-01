@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/routes/notification.dart';
 import 'package:sucial_cs310_project/routes/search_page.dart';
@@ -15,14 +14,10 @@ import 'package:sucial_cs310_project/routes/signup.dart';
 import 'package:sucial_cs310_project/routes/welcome.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:sucial_cs310_project/model/user_profile.dart';
 
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //FirebaseCrashlytics.instance.crash();
-  //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runApp(MyApp());
 }
 

@@ -79,7 +79,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                               Icons.search,
                             ),
                             suffixIcon: IconButton(
-                              icon: Icon(Icons.clear),
+                              icon: const Icon(Icons.clear),
                               onPressed: clearSearch,
                             ),
                           ),
@@ -87,15 +87,17 @@ class _SearchPageState2 extends State<SearchPage2> {
                         ),
                       ),
                       ToggleButtons(
-                        children: [
-                          const Text("User Search"),
-                          const Text("Post Search"),
+                        children: const<Widget>[
+                          Text("User Search"),
+                          Text("Post Search"),
                         ],
                         isSelected: isSelected,
                         onPressed: (int index) {
                           setState(() {
                             isSelected[0] = index == 1 ? false: true;
                             isSelected[1] = index == 1 ? true : false;
+                            searchController.clear();
+
                           });
                         },
                       ),
@@ -106,7 +108,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   (QueryDocumentSnapshot<Object?> element) =>
                                   element['usernameLower']
                                       .toString().contains(
-                                      searchController.text.toLowerCase()))
+                                      searchController.text.toLowerCase()) && !element["isDisabled"])
                               .map((QueryDocumentSnapshot<Object?> data) =>
                               SearchCard(
                                 analytics: widget.analytics,
@@ -151,7 +153,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                               Icons.search,
                             ),
                             suffixIcon: IconButton(
-                              icon: Icon(Icons.clear),
+                              icon: const Icon(Icons.clear),
                               onPressed: clearSearch,
                             ),
                           ),
@@ -159,15 +161,16 @@ class _SearchPageState2 extends State<SearchPage2> {
                         ),
                       ),
                       ToggleButtons(
-                        children: [
-                          const Text("User Search"),
-                          const Text("Post Search"),
+                        children: const <Widget>[
+                          Text("User Search"),
+                          Text("Post Search"),
                         ],
                         isSelected: isSelected,
                         onPressed: (int index) {
                           setState(() {
                             isSelected[0] = index == 1 ? false: true;
                             isSelected[1] = index == 1 ? true : false;
+                            searchController.clear();
                           });
 
                         },
@@ -179,7 +182,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   (QueryDocumentSnapshot<Object?> element) =>
                                   element['text']
                                       .toString().contains(
-                                      searchController.text.toLowerCase()))
+                                      searchController.text.toLowerCase()) && !element["isDisabled"])
                               .map((QueryDocumentSnapshot<Object?> data) =>
                               PostTile(
                                 delete: (){},
@@ -212,7 +215,8 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   text: data["text"],
                                   userId: data["userId"],
                                   username: data["username"],
-                                  image: data["image"]
+                                  image: data["image"],
+                                  isDisabled: data["isDisabled"]
                                 ),
                               )).toList(),
                         )
