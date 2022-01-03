@@ -168,6 +168,26 @@ class _OtherUserState extends State<OtherUser> {
                               incrementLike: (){
                                 usersService.likePost(user.uid, post["userId"], post["postId"]);
                               },
+                              sharePost: () async{
+                                final username = await usersService.getUserName(user.uid);
+                                final postCount = await usersService.getPostCount(user.uid);
+
+                                final addPost = Post(
+                                    comments: post["comments"],
+                                    date:post["date"],
+                                    dislikeCount: post["dislikes"].length,
+                                    likeCount: post["likes"].length,
+                                    postId: (postCount + 1),
+                                    text: post["text"],
+                                    userId: post["userId"],
+                                    username:  username,
+                                    image: post["image"],
+                                    isDisabled: post["isDisabled"],
+                                    isShared: true,
+                                    fromWho: post["username"]
+                                );
+                                usersService.createPost(user.uid, addPost);
+                              },
                               incrementComment: (){
                                 Navigator.push(
                                     context,

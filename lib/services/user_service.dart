@@ -27,7 +27,8 @@ class UsersService{
       'isPrivate': false,
       'notifications': [],
       'isThereNewNotif': false,
-      'isDisabled': false
+      'isDisabled': false,
+      'postCount': 0
     });
   }
   Future deleteUser(String userId) async
@@ -89,6 +90,11 @@ class UsersService{
     var crrGet = await users.doc(userId).get();
     return crrGet.get("username");
   }
+  Future getPostCount(String userId) async
+  {
+    var crrGet = await users.doc(userId).get();
+    return crrGet.get("postCount");
+  }
   Future isSignupDone(String userId) async{
     bool? dynamicNested;
     users.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
@@ -103,8 +109,8 @@ class UsersService{
     String downloadURL = await uploadTask.ref.getDownloadURL();
     return downloadURL;
   }
-  Future<String> uploadPost(User? user,File file) async{
-    var storageRef = storage.ref().child("user/profile/posts/${user!.uid}");
+  Future<String> uploadPost(User? user,File file, String postId) async{
+    var storageRef = storage.ref().child("user/profile/posts/${user!.uid + postId}");
     var uploadTask = await storageRef.putFile(file);
     String downloadURL = await uploadTask.ref.getDownloadURL();
     return downloadURL;
@@ -115,7 +121,6 @@ class UsersService{
     setProfilePic(url, user!.uid);
 
   }
-  // Bu yanlis olmali
   Future<bool> doesUsernameExist(String username) async
   {
     final QuerySnapshot result = await users
@@ -254,11 +259,36 @@ class UsersService{
     users.doc(userId).update(
       {
         'posts': FieldValue.arrayUnion([post.toJson()]),
+        'postCount': FieldValue.increment(1)
       }
     );
     PostService postService = PostService();
     postService.addPostTo(userId, post);
 
+  }
+  Future<void> editPost(String userId, int postId, String text) async
+  {
+    var docRef = await users.doc(userId).get();
+    var posts = (docRef.data() as Map<String, dynamic>)["posts"];
+    var thePost = posts[0];
+    int i = 0;
+    for(; i < posts.length ; i++)
+    {
+      if(postId == posts[i]["postId"])
+      {
+        thePost = posts[i];
+        break;
+      }
+    }
+    thePost["text"] = text;
+    posts[i] = thePost;
+    users.doc(userId).update(
+        {
+          'posts': posts
+        }
+    );
+    PostService postService = PostService();
+    postService.editPost(userId + postId.toString(), text);
   }
   deletePost(String userId, Map<String, dynamic> post) async{
     users.doc(userId).update({
@@ -360,13 +390,7 @@ class UsersService{
       pushNotifications(userId, otherUserId, " commented on your post.");
 
   }
-  Future<int> getPostCount(String userId) async
-  {
-    var docRef = await users.doc(userId).get();
-    var obj = docRef.data() as Map<String, dynamic>;
-    var len = obj["posts"].length;
-    return len;
-  }
+
   updatePrivacy(String userId, bool isPrivate) async{
     users.doc(userId).update({
       "isPrivate": isPrivate

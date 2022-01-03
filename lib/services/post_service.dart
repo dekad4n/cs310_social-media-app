@@ -62,14 +62,18 @@ class PostService{
   }
   Future<void> sendCommendTo(String userId, String otherUserId, int postId, String context) async
   {
-    var docRef = await posts.doc(otherUserId + postId.toString()).get();
-    posts.doc(otherUserId).update({
+    posts.doc(otherUserId + postId.toString()).update({
       "comments": FieldValue.arrayUnion([{"senderId":  userId, "context": context}])
     });
 
   }
+  Future<void> editPost(String postId, String text) async{
+    posts.doc(postId).update({
+      'text': text
+    });
+  }
   deletePost(String userId, Map<String, dynamic> post) async{
-    posts.doc(userId + post["postId"]).delete();
+    posts.doc(userId + post["postId"].toString()).delete();
   }
 
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/model/post.dart';
+import 'package:sucial_cs310_project/routes/edit_profile.dart';
+import 'package:sucial_cs310_project/routes/posting/edit_post.dart';
 
 
 class PostTile extends StatelessWidget {
@@ -9,6 +11,7 @@ class PostTile extends StatelessWidget {
   final VoidCallback incrementLike;
   final VoidCallback incrementComment;
   final VoidCallback incrementDislike;
+  final VoidCallback sharePost;
   final bool isOther;
 
 
@@ -19,6 +22,7 @@ class PostTile extends StatelessWidget {
     required this.incrementLike,
     required this.incrementComment,
     required this.incrementDislike,
+    required this.sharePost
   });
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,21 @@ class PostTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("@${post.username}"),
+            Row(
+              children: [
+
+                Text("@${post.username}"),
+                if(post.isShared)
+                  Text(" via @${post.fromWho}"),
+
+                const Spacer(),
+                IconButton(
+                    onPressed: sharePost,
+                    icon: const Icon(Icons.share)
+                ),
+
+              ],
+            ),
             const SizedBox(height: 16),
             if (post.image != null) Image.network(
               post.image!,
@@ -42,8 +60,10 @@ class PostTile extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 children: [
-                  Text(
-                    post.text,
+                  Flexible(
+                    child: Text(
+                      post.text,
+                    ),
                   ),
                   if(!isOther)
                     IconButton(
@@ -56,6 +76,26 @@ class PostTile extends StatelessWidget {
                         Icons.delete,
                       ),
                     ),
+                  if(!isOther)
+                    IconButton(
+                        onPressed: (){
+                          // Edit Post page
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditPost(
+                                          userId: post.userId,
+                                          postId: post.postId,
+                                          picture: post.image,
+                                      )
+                              )
+                          );
+                        },
+                        iconSize: 14,
+                        splashRadius: 24,
+                        icon: const Icon(Icons.edit)
+                    )
                 ],
               ),
             ),
