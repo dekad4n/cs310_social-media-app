@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -64,6 +66,7 @@ class AuthService{
     // Trigger the authentication flow
 
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    print("sign in ? ");
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
@@ -77,6 +80,22 @@ class AuthService{
     // Once signed in, return the UserCredential
     UserCredential result =  await FirebaseAuth.instance.signInWithCredential(credential);
     User? user =  result.user;
+    int idx = user!.email!.indexOf('@');
+    String username = user.email!.substring(0,idx);
+    UsersService usersService = UsersService();
+    Random random = Random();
+    while(true)
+      {
+        bool doesExist = await usersService.doesUsernameExist(username);
+        if(!doesExist) {
+          break;
+        }
+        else{
+          int randomNumber = random.nextInt(10);
+          username += randomNumber.toString();
+        }
+      }
+    usersService.addUser(username,user.uid);
     return _userFromFirebase(user);
   }
   Future<UserCredential> signInWithFacebook() async {

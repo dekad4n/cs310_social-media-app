@@ -55,6 +55,9 @@ class _FeedViewState extends State<FeedView> {
                 List<dynamic> following = (snapshot.data!.data() as Map<
                     String,
                     dynamic>)["following"];
+                var uname = (snapshot.data!.data() as Map<
+                    String,
+                    dynamic>)["username"];
                 return StreamBuilder<QuerySnapshot>(
                     stream: usersService.users.snapshots().asBroadcastStream(),
                     builder: (BuildContext context,
@@ -65,7 +68,7 @@ class _FeedViewState extends State<FeedView> {
                         for (int i = 0; i < following.length; i++) {
                           posts = posts + querySnapshot.data!.docs.where(
                                   (QueryDocumentSnapshot<Object?> element) {
-                                return following.contains(element["userId"]) && !element["isDisabled"];
+                                return (following.contains(element["userId"]) && !element["isDisabled"]);
                               }
                           ).map((data) => (data["posts"])).toList();
                           posts = posts.isNotEmpty? posts[0] : posts;
@@ -101,6 +104,25 @@ class _FeedViewState extends State<FeedView> {
                                                       )
                                               )
                                           );
+                                        },
+                                        sharePost: ()async{
+                                          final postCount = await usersService.getPostCount(user.uid);
+
+                                          final addPost = Post(
+                                              comments: post["comments"],
+                                              date:post["date"],
+                                              dislikeCount: post["dislikes"].length,
+                                              likeCount: post["likes"].length,
+                                              postId: postCount + 1,
+                                              text: post["text"],
+                                              userId: post["userId"],
+                                              username: uname,
+                                              image: post["image"],
+                                              isDisabled: post["isDisabled"],
+                                              isShared: true,
+                                              fromWho: post["username"]
+                                          );
+                                          usersService.createPost(user.uid, addPost);
                                         },
                                         incrementDislike: () {
                                           usersService.dislikePost(

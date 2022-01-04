@@ -163,6 +163,25 @@ class _ProfileViewState extends State<ProfileView> {
                                         )
                                     );
                                   },
+                                  sharePost: () async{
+                                    final postCount = await usersService.getPostCount(user.uid);
+
+                                    final addPost = Post(
+                                        comments: post["comments"],
+                                        date:post["date"],
+                                        dislikeCount: post["dislikes"].length,
+                                        likeCount: post["likes"].length,
+                                        postId: postCount + 1,
+                                        text: post["text"],
+                                        userId: post["userId"],
+                                        username: userProfile.username,
+                                        image: post["image"],
+                                        isDisabled: post["isDisabled"],
+                                        isShared: true,
+                                        fromWho: post["username"]
+                                    );
+                                    usersService.createPost(user.uid, addPost);
+                                      },
                                   incrementDislike: (){
                                     usersService.dislikePost(user.uid, userProfile.userId, post["postId"]);
 

@@ -374,7 +374,7 @@ class _SignupState extends State<Signup> {
                             ),
                             onPressed: () {
                               _auth.signInWithGoogle();
-                              setuserId(widget.analytics, user!.uid);
+
 
                             },
                             child: Padding(

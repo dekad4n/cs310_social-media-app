@@ -205,8 +205,28 @@ class _SearchPageState2 extends State<SearchPage2> {
                                 incrementLike: (){
                                   userService.likePost(user!.uid, data["userId"], data["postId"]);
                                 },
+                                sharePost: () async{
+                                  final username = await userService.getUserName(user!.uid);
+                                  final postCount = await userService.getPostCount(user.uid);
+                                  final post = Post(
+                                      comments: data["comments"],
+                                      date:data["date"],
+                                      dislikeCount: data["dislikes"].length,
+                                      likeCount: data["likes"].length,
+                                      postId: postCount + 1,
+                                      text: data["text"],
+                                      userId: data["userId"],
+                                      username: username,
+                                      image: data["image"],
+                                      isDisabled: data["isDisabled"],
+                                      isShared: true,
+                                      fromWho: data["username"]
+                                  );
+                                  userService.createPost(user.uid, post);
+                                },
                                 isOther: true,
                                 post: Post(
+
                                   comments: data["comments"],
                                   date:data["date"],
                                   dislikeCount: data["dislikes"].length,
@@ -216,7 +236,9 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   userId: data["userId"],
                                   username: data["username"],
                                   image: data["image"],
-                                  isDisabled: data["isDisabled"]
+                                  isDisabled: data["isDisabled"],
+                                  isShared: data["isShared"],
+                                  fromWho: data["fromWho"]
                                 ),
                               )).toList(),
                         )
