@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
           if(snapshot.hasError) {
 
             return const MaterialApp(
+              title: "Sucial",
               home: Scaffold(body: Center(child: Text("No FB"))),
             );
           }
@@ -58,6 +59,7 @@ class _MyAppState extends State<MyApp> {
           }
 
           return const MaterialApp(
+            title: "Sucial",
             home: Scaffold(body: Center(child: Text("Loading"))),
           );
         }
@@ -76,6 +78,7 @@ class AppBase extends StatelessWidget {
       value: AuthService().user,
       initialData: null,
       child: MaterialApp(
+        title: "Sucial",
         navigatorObservers: <NavigatorObserver>[observer],
         initialRoute: '/welcome',
         routes: {

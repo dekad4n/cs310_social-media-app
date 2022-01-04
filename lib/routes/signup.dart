@@ -345,9 +345,8 @@ class _SignupState extends State<Signup> {
                             style: TextButton.styleFrom(
                               primary: AppColors.backgroundColor,
                             ),
-                            onPressed: () {
-                              _auth.signInWithFacebook();
-
+                            onPressed: () async {
+                              await _auth.signInWithFacebook();
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
@@ -372,8 +371,8 @@ class _SignupState extends State<Signup> {
                             style: TextButton.styleFrom(
                               primary: AppColors.backgroundColor,
                             ),
-                            onPressed: () {
-                              _auth.signInWithGoogle();
+                            onPressed: () async{
+                              await _auth.signInWithGoogle();
 
 
                             },

@@ -238,7 +238,7 @@ class _DeleteUserState extends State<DeleteUser> {
                             primary: AppColors.backgroundColor,
                           ),
                           onPressed: () {
-                            auth.signInWithFacebook();
+                            // to do sign in with facebook
                           },
                           child: Padding(
                             padding: Dimen.symmetricSignupInsets,

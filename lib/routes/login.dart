@@ -244,8 +244,8 @@ class _LoginState extends State<Login> {
                             style: TextButton.styleFrom(
                               primary: AppColors.backgroundColor,
                             ),
-                            onPressed: () {
-                              auth.signInWithFacebook();
+                            onPressed: () async{
+                              await auth.signInWithFacebook();
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
@@ -270,8 +270,8 @@ class _LoginState extends State<Login> {
                             style: TextButton.styleFrom(
                               primary: AppColors.backgroundColor,
                             ),
-                            onPressed: () {
-                              auth.signInWithGoogle();
+                            onPressed: () async{
+                              await auth.signInWithGoogle();
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
@@ -305,7 +305,7 @@ class _LoginState extends State<Login> {
           future: usersService.users.doc(user.uid).get(),
           builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot)
           {
-            if(snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+            if(snapshot.hasData && snapshot.connectionState == ConnectionState.done  && snapshot.data != null && snapshot.data!.data() != null) {
               bool isDisabled = (snapshot.data!.data() as Map<String,
                   dynamic>)["isDisabled"];
               if (isDisabled) {
