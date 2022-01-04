@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/model/post.dart';
-import 'package:sucial_cs310_project/routes/edit_profile.dart';
 import 'package:sucial_cs310_project/routes/posting/edit_post.dart';
+import 'package:sucial_cs310_project/services/report_service.dart';
+import 'package:sucial_cs310_project/widgets/alert.dart';
 
 
 class PostTile extends StatelessWidget {
@@ -15,7 +18,7 @@ class PostTile extends StatelessWidget {
   final bool isOther;
 
 
-  const PostTile({
+  PostTile({
     required this.post,
     required this.isOther,
     required this.delete,
@@ -24,8 +27,15 @@ class PostTile extends StatelessWidget {
     required this.incrementDislike,
     required this.sharePost
   });
+   List<String> choices =  const<String>[
+     "Report user",
+     "Report post"
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
       shadowColor: Colors.grey,
@@ -47,6 +57,31 @@ class PostTile extends StatelessWidget {
                     onPressed: sharePost,
                     icon: const Icon(Icons.share)
                 ),
+                PopupMenuButton(
+                    onSelected: (String choice){
+                      if(choice == choices[0])
+                        {
+                          // report user
+                          reportUserAlert(context, "Reporting user", "Why?", true,post.userId,post.postId.toString(),user!.uid);
+                          //ReportService().reportUser(post.userId,user!.uid , "Null for now");
+                        }
+                      else if(choice == choices[1]){
+                        // report post
+                        reportUserAlert(context, "Reporting post", "Why", false, post.userId,post.postId.toString(),user!.uid);
+                          //ReportService().reportPost(post.userId +post.postId.toString(), user!.uid, "post report");
+                      }
+                    },
+                    itemBuilder: (BuildContext context)
+                        {
+                          return choices.skip(0).map((String choice){
+                            return PopupMenuItem(
+                                value: choice,
+                                child: Text(choice),
+                            );
+                          }).toList();
+                        }
+                )
+
 
               ],
             ),

@@ -30,6 +30,22 @@
           }
         },
         {
+          "client_id": "857678140723-pg2lsahf4slfrl39jg51cnjpl2stb5fl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sucial_cs310_project",
+            "certificate_hash": "550cfa4df14405379db30e344c222e705c0d0714"
+          }
+        },
+        {
+          "client_id": "857678140723-us772o85l965qpiomf21s8lf44sjqhfh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sucial_cs310_project",
+            "certificate_hash": "17df261bf45ae45f98adf582c1bb077a25012114"
+          }
+        },
+        {
           "client_id": "857678140723-i4fhhsug9qgf1godaqd7rd471vfsr616.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -45,6 +61,13 @@
             {
               "client_id": "857678140723-i4fhhsug9qgf1godaqd7rd471vfsr616.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "857678140723-jpfu6n4v9n7gfqf8rpog7ed7aqjh9ek6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sucialCs310Project"
+              }
             }
           ]
         }
