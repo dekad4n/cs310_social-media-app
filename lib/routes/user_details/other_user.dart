@@ -42,7 +42,7 @@ class _OtherUserState extends State<OtherUser> {
     if(user != null) {
 
       return Scaffold(
-        appBar: appBarDefault(context),
+        appBar: appBarBack(context, "Explore"),
         body: StreamBuilder<DocumentSnapshot>(
           stream: usersService.users.doc(widget.otherUserId).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){

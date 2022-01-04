@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -80,22 +81,26 @@ class AuthService{
     // Once signed in, return the UserCredential
     UserCredential result =  await FirebaseAuth.instance.signInWithCredential(credential);
     User? user =  result.user;
-    int idx = user!.email!.indexOf('@');
-    String username = user.email!.substring(0,idx);
+
     UsersService usersService = UsersService();
-    Random random = Random();
-    while(true)
-      {
+
+    DocumentSnapshot ds = await usersService.users.doc(user!.uid).get();
+    if(!ds.exists) {
+      int idx = user.email!.indexOf('@');
+      String username = user.email!.substring(0, idx);
+      Random random = Random();
+      while (true) {
         bool doesExist = await usersService.doesUsernameExist(username);
-        if(!doesExist) {
+        if (!doesExist) {
           break;
         }
-        else{
+        else {
           int randomNumber = random.nextInt(10);
           username += randomNumber.toString();
         }
       }
-    usersService.addUser(username,user.uid);
+      usersService.addUser(username, user.uid);
+    }
     return _userFromFirebase(user);
   }
   Future<UserCredential> signInWithFacebook() async {

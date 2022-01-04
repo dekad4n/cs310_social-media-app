@@ -53,7 +53,7 @@ AppBar appBarSignOut(BuildContext context){
           onPressed: (){
             AuthService _auth = AuthService();
             _auth.signOut();
-            Navigator.pushNamed(context, 'login');
+            Navigator.pushNamed(context, '/login');
           },
           icon: const Icon(Icons.logout)
       )
