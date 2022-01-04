@@ -97,9 +97,16 @@ class UsersService{
   }
   Future isSignupDone(String userId) async{
     bool? dynamicNested;
-    users.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
-      dynamicNested = documentSnapshot.get(FieldPath(['isSignupDone']));
-      });
+    DocumentSnapshot ds = await users.doc(userId).get();
+    if(ds.exists) {
+      try {
+        users.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
+          dynamicNested = documentSnapshot.get(FieldPath(['isSignupDone']));
+        });
+      } catch (e) {
+        return false;
+      }
+    }
     return dynamicNested ?? false;
   }
 

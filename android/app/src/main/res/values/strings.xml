@@ -1,0 +1,5 @@
+<resources>
+    <string name = "app_name">Sucial</string>
+    <string name="facebook_app_id">1248692445625559</string>
+    <string name="fb_login_protocol_scheme">fb1248692445625559</string>
+</resources>

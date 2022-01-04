@@ -40,9 +40,9 @@ class _ProfileViewState extends State<ProfileView> {
             {
               return const Center(child: Text("Refresh the page!"));
             }
-            if(snapshot.connectionState == ConnectionState.done)
+            if(snapshot.connectionState == ConnectionState.done && snapshot.hasData  && snapshot.data != null && snapshot.data!.data() != null)
             {
-              UserProfile userProfile = UserProfile.fromMap(snapshot.data!.data() as Map<String,dynamic>);
+              UserProfile userProfile = UserProfile.fromMap((snapshot.data!.data() ?? Map<String,dynamic>.identity()) as Map<String,dynamic>);
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),

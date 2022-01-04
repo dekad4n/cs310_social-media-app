@@ -47,9 +47,9 @@ class _FeedViewState extends State<FeedView> {
             {
             return const Center(child: Text("Refresh the page!"));
             }
-            if(snapshot.connectionState == ConnectionState.done)
+            if(snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data != null && snapshot.data!.data() != null)
             {
-              bool isDisabled = (snapshot.data!.data() as Map<String,dynamic>) ["isDisabled"];
+              bool isDisabled = ((snapshot.data!.data() ?? Map<String,dynamic>.identity()) as Map<String,dynamic>) ["isDisabled"] ?? false;
               disabled = isDisabled;
               if(!isDisabled) {
                 List<dynamic> following = (snapshot.data!.data() as Map<
