@@ -373,8 +373,6 @@ class _SignupState extends State<Signup> {
                             ),
                             onPressed: () async{
                               await _auth.signInWithGoogle();
-
-
                             },
                             child: Padding(
                               padding: Dimen.symmetricSignupInsets,
