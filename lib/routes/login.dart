@@ -59,6 +59,7 @@ class _LoginState extends State<Login> {
     setCurrentScreen(widget.analytics, 'Init Login Page', 'login.dart');
     setLogEvent(widget.analytics, "init_login");
   }
+  bool isSocial = false;
   @override
   Widget build(BuildContext context){
     final user = Provider.of<User?>(context);
@@ -126,7 +127,7 @@ class _LoginState extends State<Login> {
                                       fillColor: AppColors.backgroundColor,
                                       filled: true,
                                       hintText: 'E-mail',
-                                      border: UnderlineInputBorder(),
+                                      border: const UnderlineInputBorder(),
                                     ),
                                     keyboardType: TextInputType.emailAddress,
 
@@ -245,6 +246,7 @@ class _LoginState extends State<Login> {
                               primary: AppColors.backgroundColor,
                             ),
                             onPressed: () async{
+                              isSocial = true;
                               await auth.signInWithFacebook();
                             },
                             child: Padding(
@@ -271,6 +273,8 @@ class _LoginState extends State<Login> {
                               primary: AppColors.backgroundColor,
                             ),
                             onPressed: () async{
+                              isSocial = true;
+
                               await auth.signInWithGoogle();
                             },
                             child: Padding(
@@ -309,13 +313,17 @@ class _LoginState extends State<Login> {
               bool isDisabled = (snapshot.data!.data() as Map<String,
                   dynamic>)["isDisabled"];
               if (isDisabled) {
-                return DisabledScreen();
+                return const DisabledScreen();
               }
               else {
                 return FeedView(
                     analytics: widget.analytics, observer: widget.observer);
               }
             }
+            if(isSocial)
+              {
+                return FeedView(analytics: widget.analytics, observer: widget.observer);
+              }
             return const Center(child: CircularProgressIndicator(),);
 
           }

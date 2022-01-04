@@ -134,7 +134,10 @@ class _FeedViewState extends State<FeedView> {
                             )
                         );
                       }
-                      return const Center(child: CircularProgressIndicator());
+                      if(snapshot.connectionState != ConnectionState.done) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      return Container();
                     }
                 );
               }
@@ -142,6 +145,10 @@ class _FeedViewState extends State<FeedView> {
                   return DisabledScreen();
               }
             }
+            if(snapshot.connectionState == ConnectionState.done)
+              {
+                return Container();
+              }
             return const Center(child: CircularProgressIndicator());
             }
         ),
