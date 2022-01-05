@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/routes/posting/edit_post.dart';
 import 'package:sucial_cs310_project/services/report_service.dart';
+import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/widgets/alert.dart';
 
 
@@ -16,6 +17,7 @@ class PostTile extends StatelessWidget {
   final VoidCallback incrementDislike;
   final VoidCallback sharePost;
   final bool isOther;
+  UsersService usersService = UsersService();
 
 
   PostTile({
@@ -29,7 +31,8 @@ class PostTile extends StatelessWidget {
   });
    List<String> choices =  const<String>[
      "Report user",
-     "Report post"
+     "Report post",
+     "Save post"
   ];
 
   @override
@@ -58,18 +61,20 @@ class PostTile extends StatelessWidget {
                     icon: const Icon(Icons.share)
                 ),
                 PopupMenuButton(
-                    onSelected: (String choice){
+                    onSelected: (String choice) async{
                       if(choice == choices[0])
                         {
                           // report user
                           reportUserAlert(context, "Reporting user", "Why?", true,post.userId,post.postId.toString(),user!.uid);
-                          //ReportService().reportUser(post.userId,user!.uid , "Null for now");
                         }
                       else if(choice == choices[1]){
                         // report post
                         reportUserAlert(context, "Reporting post", "Why", false, post.userId,post.postId.toString(),user!.uid);
-                          //ReportService().reportPost(post.userId +post.postId.toString(), user!.uid, "post report");
                       }
+                      else if(choice == choices[2])
+                        {
+                          usersService.addBookmark(user!.uid,  post.userId+ post.postId.toString());
+                        }
                     },
                     itemBuilder: (BuildContext context)
                         {
