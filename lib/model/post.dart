@@ -11,6 +11,7 @@ class Post{
   bool isDisabled;
   bool isShared;
   String fromWho;
+  String Topic;
 
   Post({
     required this.postId,
@@ -25,6 +26,7 @@ class Post{
     required this.isDisabled,
     required this.fromWho,
     required this.isShared,
+    required this.Topic,
   });
   @override
   String toString() => 'Post: $text\nDate: $date\nLikes: $likeCount\nComments: $comments\nDislikes: $dislikeCount';
@@ -41,7 +43,8 @@ class Post{
         'dislikes': [],
         'isDisabled': isDisabled,
         'fromWho': fromWho,
-        'isShared': isShared
+        'isShared': isShared,
+        'Topic': Topic
       };
   factory Post.fromMap(Map data){
     return Post(
@@ -56,7 +59,8 @@ class Post{
       dislikeCount: data['dislikes'].length,
       isDisabled: data['isDisabled'] ?? false,
       isShared: data['isShared'] ?? false,
-      fromWho: data['fromWho'] ?? ""
+      fromWho: data['fromWho'] ?? "",
+      Topic: data['Topic']
     );
   }
 }

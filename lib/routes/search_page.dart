@@ -220,7 +220,8 @@ class _SearchPageState2 extends State<SearchPage2> {
                                       image: data["image"],
                                       isDisabled: data["isDisabled"],
                                       isShared: true,
-                                      fromWho: data["username"]
+                                      fromWho: data["username"],
+                                      Topic: data["Topic"]
                                   );
                                   userService.createPost(user.uid, post);
                                 },
@@ -238,7 +239,8 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   image: data["image"],
                                   isDisabled: data["isDisabled"],
                                   isShared: data["isShared"],
-                                  fromWho: data["fromWho"]
+                                  fromWho: data["fromWho"],
+                                  Topic: data["Topic"]
                                 ),
                               )).toList(),
                         )

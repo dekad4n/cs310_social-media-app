@@ -21,6 +21,8 @@ class AddPost extends StatefulWidget {
 class _AddPostState extends State<AddPost> {
   File? image;
   String? text;
+  String? topictext;
+
   final _formKey = GlobalKey<FormState>();
   UsersService usersService = UsersService();
   Future pickImage() async {
@@ -86,7 +88,7 @@ class _AddPostState extends State<AddPost> {
                             }
                             final timestamp = DateTime.now(); // timestamp in seconds
                             String today = timestamp.year.toString() + "/" +timestamp.month.toString() + "/"+ timestamp.day.toString();
-                            Post post = Post(userId: user.uid,postId: userProfile.postCount+1,username: userProfile.username,image: imageStr,text: text ?? "", likeCount: 0, date: today.toString(), comments: [], dislikeCount: 0, isDisabled: false, isShared: false, fromWho: "");
+                            Post post = Post(userId: user.uid,postId: userProfile.postCount+1,username: userProfile.username,image: imageStr,text: text ?? "", likeCount: 0, date: today.toString(), comments: [], dislikeCount: 0, isDisabled: false, isShared: false, fromWho: "",Topic: topictext ?? "");
                             userService.createPost(user.uid, post);
                             Navigator.pushNamed(context, '/profile');
                           },
@@ -107,6 +109,8 @@ class _AddPostState extends State<AddPost> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+
+
                           IconButton(
                               iconSize: MediaQuery.of(context).size.width,
                               onPressed: () => pickImage(),
@@ -122,7 +126,19 @@ class _AddPostState extends State<AddPost> {
                                     onSaved:(value){ text =value;},
                                   ),
                                 ],
-                              ))
+                              )),
+
+                          Padding(
+                              padding: Dimen.symmetricSignupInsets,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("Post Topic"),
+                                  TextFormField(
+                                    onSaved:(value){ topictext =value;},
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
                     ),
