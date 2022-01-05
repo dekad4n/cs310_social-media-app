@@ -28,15 +28,15 @@ class UsersService{
       'notifications': [],
       'isThereNewNotif': false,
       'isDisabled': false,
-      'postCount': 0
+      'postCount': 0,
+      'bookmarks': []
     });
   }
   Future deleteUser(String userId) async
   {
     users.doc(userId).delete();
-
   }
-  Future disableUser(String userId) async{
+  Future<void> disableUser(String userId) async{
     await users.doc(userId).update(
         {
           'isDisabled': true
@@ -402,5 +402,14 @@ class UsersService{
     users.doc(userId).update({
       "isPrivate": isPrivate
     });
+  }
+
+  Future<void> addBookmark(String userId,String postId) async
+  {
+    users.doc(userId).update(
+      {
+        'bookmarks': FieldValue.arrayUnion([postId])
+      }
+    );
   }
 }

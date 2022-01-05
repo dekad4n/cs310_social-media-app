@@ -12,6 +12,7 @@ class UserProfile
   late List<dynamic> following;
   late List<dynamic> requests;
   late List<dynamic> notifications;
+  late List<dynamic> bookmarks;
   late bool isThereNewNotif;
   late bool isDisabled;
   late int postCount;
@@ -33,7 +34,8 @@ class UserProfile
     required this.notifications,
     required this.isThereNewNotif,
     required this.isDisabled,
-    required this.postCount
+    required this.postCount,
+    required this.bookmarks
   });
 
   factory UserProfile.fromMap(Map data){
@@ -51,7 +53,8 @@ class UserProfile
         notifications:  data["notifications"],
         isThereNewNotif: data["isThereNewNotif"],
         isDisabled: data["isDisabled"],
-        postCount: data["postCount"]
+        postCount: data["postCount"],
+        bookmarks: data["bookmarks"]
     );
   }
 }

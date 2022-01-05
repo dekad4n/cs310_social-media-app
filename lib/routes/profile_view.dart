@@ -9,6 +9,7 @@ import 'package:sucial_cs310_project/model/user_profile.dart';
 import 'package:sucial_cs310_project/routes/comments.dart';
 import 'package:sucial_cs310_project/routes/edit_profile.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
+import 'package:sucial_cs310_project/routes/user_details/bookmarks.dart';
 import 'package:sucial_cs310_project/routes/user_details/followers.dart';
 import 'package:sucial_cs310_project/routes/user_details/following.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
@@ -114,18 +115,31 @@ class _ProfileViewState extends State<ProfileView> {
                                   icon: const Icon(Icons.add_location)
                               ),
                               IconButton(
-                                  onPressed: (){},
+                                  onPressed: (){
+
+                                  },
                                   tooltip: 'IDK',
                                   icon: const Icon(Icons.not_started)
-                              )
+                              ),
+
                             ],
                           ),
                           SizedBox(width: MediaQuery.of(context).size.width/6 ,),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 16.0),
-                            child: Text(userProfile.biography),
-                          ),
+                          Flexible(
+                              child: Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: Text(userProfile.biography))),
                           SizedBox(width: MediaQuery.of(context).size.width/4,),
+                          IconButton(
+                              onPressed: (){
+                                Navigator.push(context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Bookmarks(userId: userProfile.userId,analytics: widget.analytics,observer: widget.observer,)
+                                    )
+                                );
+                              },
+                              icon: const Icon(Icons.bookmarks)
+                          )
                         ],
 
                       ),

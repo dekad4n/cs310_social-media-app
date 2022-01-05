@@ -1,12 +1,7 @@
-import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/routes/posting/add_post.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
-import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/styles.dart';
 
