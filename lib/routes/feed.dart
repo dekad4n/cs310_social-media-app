@@ -120,7 +120,8 @@ class _FeedViewState extends State<FeedView> {
                                               image: post["image"],
                                               isDisabled: post["isDisabled"],
                                               isShared: true,
-                                              fromWho: post["username"]
+                                              fromWho: post["username"],
+                                              Topic: post["Topic"]
                                           );
                                           usersService.createPost(user.uid, addPost);
                                         },
