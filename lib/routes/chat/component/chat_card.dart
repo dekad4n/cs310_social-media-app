@@ -27,24 +27,7 @@ class Chatcard extends StatelessWidget {
                   backgroundImage: AssetImage(chat.image),
                 ),
 
-                if(chat.isActive)
-                  Positioned(
-                    right: 0,
-                    bottom: 0,
-                    child: Container(
-                      height: 16,
-                      width: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            width:3
-                        ),
-                      ),
 
-                    ),
-                  )
               ],
             ),
             Expanded(child: Padding(

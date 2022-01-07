@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 
 import 'component/body.dart';
-
+//TODO: usera tıkladıgında bu sayfa acılmalı
 class MessagesScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -27,13 +27,10 @@ class MessagesScreen extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Sadi Gulbey",
+                "Sadi Gulbey", // tıklanan userın adı olcak firebaseden gelcek buralar
                  style: TextStyle(fontSize: 16),
               ),
-              Text(
-                "Active 3m ago",
-                style: TextStyle(fontSize: 12),
-              )
+
 
             ],
           )

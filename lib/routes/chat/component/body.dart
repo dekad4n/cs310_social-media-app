@@ -13,35 +13,30 @@ class Body extends StatelessWidget{
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(20,0, 20, 20),
+
           color: AppColors.backgroundColor,
-              child: Row(
-                children: [
-                  FillOutlineButton(press: () {}, text:"Recent Message"),
-                  SizedBox(width: 20),
-                  FillOutlineButton(
-                      press: () {},
-                      text:"Active",
-                      isFilled: false,
-                  ),
-                ],
-              ),
-        ),
-        Expanded(child: ListView.builder(
-          itemCount: chatdata.length,
-          itemBuilder: (context, index) => Chatcard(
-            chat : chatdata[index],
-            press: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MessagesScreen(),
-                ),
-            ),
+          child: Row(
+
           ),
-        )
         ),
+      //TODO: burda firebasedeki converstaionların gorunmesi icin gereken kısmı yazmalıyız
+      /*Expanded(child: ListView.builder(
+      itemCount: chatdata.length,
+      itemBuilder: (context, index) => Chatcard(
+      chat : chatdata[index],
+      press: () => Navigator.push(
+      context,
+      MaterialPageRoute(
+      builder: (context) => MessagesScreen(),
+      ),
+      ),
+      ),
+      )
+
+       */
+
       ],
+
     );
   }
 }
-

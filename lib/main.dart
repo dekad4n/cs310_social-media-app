@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
 import 'package:sucial_cs310_project/routes/chat/dmbox.dart';
 import 'package:sucial_cs310_project/routes/search_page.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
@@ -77,7 +78,7 @@ class AppBase extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[observer],
-        initialRoute: '/dmbox',
+        initialRoute: '/welcome',
         routes: {
           '/profile': (context) => ProfileView(analytics: analytics, observer: observer),
           '/walkthrough': (context) => WalkThrough(analytics: analytics, observer: observer),
