@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sucial_cs310_project/model/post.dart';
 import 'package:sucial_cs310_project/model/user_profile.dart';
+import 'package:sucial_cs310_project/services/topic_service.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
 import 'package:sucial_cs310_project/utils/dimensions.dart';
@@ -90,6 +91,10 @@ class _AddPostState extends State<AddPost> {
                             String today = timestamp.year.toString() + "/" +timestamp.month.toString() + "/"+ timestamp.day.toString();
                             Post post = Post(userId: user.uid,postId: userProfile.postCount+1,username: userProfile.username,image: imageStr,text: text ?? "", likeCount: 0, date: today.toString(), comments: [], dislikeCount: 0, isDisabled: false, isShared: false, fromWho: "",Topic: topictext ?? "");
                             userService.createPost(user.uid, post);
+                            if(topictext != null && topictext != "") {
+                              TopicService().addToTopic(topictext!,
+                                  post.userId + post.postId.toString());
+                            }
                             Navigator.pushNamed(context, '/profile');
                           },
                           child: Text(

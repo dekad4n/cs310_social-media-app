@@ -5,9 +5,30 @@ import 'package:sucial_cs310_project/model/post.dart';
 class TopicService{
   final CollectionReference topics = FirebaseFirestore.instance.collection('Topic');
 
-  addTopicto()async{
+  addToTopic(String topicName,String postID)async{
+    final docRef = await topics.doc(topicName).get();
+    if(docRef.exists)
+    {
+      await topics.doc(topicName).update(
+          {
+            'postIdList': FieldValue.arrayUnion([postID])
+          }
+      );
+
+
+    }
+    else{
+      await topics.doc(topicName).set(
+          {
+            'postIdList': [postID]
+          }
+      );
+    }
 
   }
+
+
+
 
 
 
