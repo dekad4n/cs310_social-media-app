@@ -75,7 +75,7 @@ class _FeedViewState extends State<FeedView> {
                         }
                         return SingleChildScrollView(
                             child: Column(
-                              children: posts.map(
+                              children: List.from(posts.map(
                                       (post) =>
                                       PostTile(
                                         post: Post.fromMap(post),
@@ -130,7 +130,7 @@ class _FeedViewState extends State<FeedView> {
                                               post["postId"]);
                                         },
                                       )
-                              ).toList(),
+                              ).toList().reversed),
                             )
                         );
                       }

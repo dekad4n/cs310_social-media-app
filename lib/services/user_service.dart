@@ -90,6 +90,11 @@ class UsersService{
     var crrGet = await users.doc(userId).get();
     return crrGet.get("username");
   }
+  Future getUserPp(String userId) async
+  {
+    var crrGet = await users.doc(userId).get();
+    return crrGet.get("profilepicture");
+  }
   Future getPostCount(String userId) async
   {
     var crrGet = await users.doc(userId).get();

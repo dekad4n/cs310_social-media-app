@@ -23,6 +23,24 @@ Future<void> showAlertScreen(BuildContext context, String title, String message)
         );
       });
 }
+Future<void> showImageAlert(BuildContext context, String image) async {
+  return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Image.network(
+              image,
+              width: MediaQuery.of(context).size.width*2/3,
+              height: MediaQuery.of(context).size.height/2,
+            ),
+          ),
+
+        );
+      });
+}
 Future<void> reportUserAlert(BuildContext context, String title, String message, bool reportType, String reportedUserId, String postId, String userId) async {
   String reason = "";
   final _formKey = GlobalKey<FormState>();

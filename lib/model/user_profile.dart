@@ -50,11 +50,11 @@ class UserProfile
         following: data['following'],
         posts:  data["posts"],
         requests: data["requests"],
-        notifications:  data["notifications"],
-        isThereNewNotif: data["isThereNewNotif"],
+        notifications:  data["notifications"] ?? <dynamic>[],
+        isThereNewNotif: data["isThereNewNotif"] ?? false,
         isDisabled: data["isDisabled"],
-        postCount: data["postCount"],
-        bookmarks: data["bookmarks"]
+        postCount: data["postCount"] ?? 0,
+        bookmarks: data["bookmarks"] ?? <dynamic>[]
     );
   }
 }

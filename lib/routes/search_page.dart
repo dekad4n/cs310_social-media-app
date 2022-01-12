@@ -43,7 +43,8 @@ class _SearchPageState2 extends State<SearchPage2> {
     super.dispose();
   }
   _onSearchChanged( ){
-
+    setState(() {
+    });
   }
   buildSearchResults(){
 
@@ -53,7 +54,6 @@ class _SearchPageState2 extends State<SearchPage2> {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
 
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     // TODO: implement build
     if(isSelected[0]) {
       return Scaffold(
@@ -108,7 +108,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   (QueryDocumentSnapshot<Object?> element) =>
                                   element['usernameLower']
                                       .toString().contains(
-                                      searchController.text.toLowerCase()) && !element["isDisabled"])
+                                      searchController.text.toLowerCase()) /*&& !element["isDisabled"]*/)
                               .map((QueryDocumentSnapshot<Object?> data) =>
                               SearchCard(
                                 analytics: widget.analytics,
@@ -116,6 +116,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                                 username: data['username'],
                                 profilePic: data['profilepicture'],
                                 userId: data['userId'],
+                                isMessage: false
                               )).toList(),
                         )
                     ],

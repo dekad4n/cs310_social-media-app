@@ -80,14 +80,14 @@ class _NotificationsState extends State<Notifications> {
 
                               ),
                               Column(
-                                children: userProfile.notifications.map((message) =>
+                                children: List.from(userProfile.notifications.map((message) =>
                                     NotificationItem(
                                       analytics: widget.analytics,
                                       observer: widget.observer,
                                       otherUserId: message["senderId"],
                                       context: message["context"],
                                     )
-                                ).toList(),
+                                ).toList().reversed),
                               )
                             ]
                             ),
