@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:sucial_cs310_project/routes/messaging/all_messages.dart';
+import 'package:sucial_cs310_project/routes/messaging/new_message.dart';
 import 'package:sucial_cs310_project/routes/posting/add_post.dart';
 import 'package:sucial_cs310_project/services/auth.dart';
 import 'package:sucial_cs310_project/utils/colors.dart';
@@ -20,7 +22,8 @@ AppBar appBarDefault(BuildContext context){
     ),
     actions: [
       IconButton(
-          onPressed: (){},
+          onPressed: () => Navigator.push(context, MaterialPageRoute(
+              builder: (context) => AllMessages())),
           icon: const Icon(Icons.send)
       )
     ],
@@ -76,6 +79,38 @@ AppBar appBarBack(BuildContext context, String appBarTitle){
       appBarTitle,
       style: sucialStylemMed,
     ),
+    centerTitle: true,
+    backgroundColor: AppColors.moreDarkerBackground,
+  );
+}
+AppBar appBarNewMessage(BuildContext context){
+  return AppBar(
+    leading: Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: IconButton(
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
+    ),
+    title: Text(
+      "Messages",
+      style: sucialStylemMed,
+    ),
+    actions: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: IconButton(
+            onPressed: ()
+            => Navigator.push(context,
+              MaterialPageRoute(builder:
+              (context) => NewMessage()
+              )
+            ),
+            icon: const Icon(Icons.add)),
+      )
+    ],
     centerTitle: true,
     backgroundColor: AppColors.moreDarkerBackground,
   );

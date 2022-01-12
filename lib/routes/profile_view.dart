@@ -14,6 +14,7 @@ import 'package:sucial_cs310_project/routes/user_details/followers.dart';
 import 'package:sucial_cs310_project/routes/user_details/following.dart';
 import 'package:sucial_cs310_project/services/user_service.dart';
 import 'package:sucial_cs310_project/ui/post_tile.dart';
+import 'package:sucial_cs310_project/widgets/alert.dart';
 import 'package:sucial_cs310_project/widgets/navbars.dart';
 
 class ProfileView extends StatefulWidget {
@@ -64,17 +65,24 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           Column(
                             children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.grey,
-                                child: ClipOval(
-                                  child: Image.network(
-                                    userProfile.profilepicture,
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                    height: 100,
+                              IconButton(
+                                onPressed: (){
+                                  showImageAlert(context, userProfile.profilepicture);
+                                },
+                                icon: CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  child: ClipOval(
+                                    child: Image.network(
+                                      userProfile.profilepicture,
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                    ),
                                   ),
+                                  radius: 50,
                                 ),
-                                radius: 50,
+                                iconSize: 100,
+                                splashRadius: 50,
                               ),
                               Text(userProfile.fullName),
                             ],
@@ -150,7 +158,7 @@ class _ProfileViewState extends State<ProfileView> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
-                          children: userProfile.posts.map(
+                          children: List.from(userProfile.posts.map(
                                   (post) => PostTile(
                                   post: Post.fromMap(post),
                                   delete: ()
@@ -202,7 +210,7 @@ class _ProfileViewState extends State<ProfileView> {
 
                                   }
                               )
-                          ).toList(),
+                          ).toList().reversed),
                         ),
                       )
                     ],
