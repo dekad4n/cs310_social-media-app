@@ -12,7 +12,7 @@ class Post{
   bool isShared;
   String fromWho;
   String topic;
-=======
+
 
   Post({
     required this.postId,
