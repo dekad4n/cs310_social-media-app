@@ -207,6 +207,8 @@ class _ProfileViewState extends State<ProfileView> {
 
                                     );
                                     usersService.createPost(user.uid, addPost);
+                                    setState(() {
+                                    });
                                       },
                                   incrementDislike: (){
                                     usersService.dislikePost(user.uid, userProfile.userId, post["postId"]);

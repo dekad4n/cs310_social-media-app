@@ -71,11 +71,19 @@ class _FeedViewState extends State<FeedView> {
                                 return ((following.contains(element["userId"])) && !element["isDisabled"]);
                               }
                           ).map((data) => (data["posts"])).toList();
-                          posts = posts.isNotEmpty? posts[0] : posts;
+
+                        }
+                        List<dynamic> newPosts = [];
+                        for(int i = 0 ; i < posts.length ; i++)
+                        {
+                          for(int k = 0 ; k < posts[i].length ; k++)
+                          {
+                            newPosts += [posts[i][k]];
+                          }
                         }
                         return SingleChildScrollView(
                             child: Column(
-                              children: List.from(posts.map(
+                              children: List.from(newPosts.map(
                                       (post) =>
                                       PostTile(
                                         post: Post.fromMap(post),

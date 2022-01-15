@@ -172,8 +172,8 @@ class _SearchPageState2 extends State<SearchPage2> {
                         isSelected: isSelected,
                         onPressed: (int index) {
                           setState(() {
-                            isSelected[0] = index == 1 ? false: true;
-                            isSelected[1] = index == 1 ? true : false;                            isSelected[2] = index == 2 ? true : false;
+                            isSelected[0] = index == 0 ? true: false;
+                            isSelected[1] = index == 1 ? true : false;
                             isSelected[2] = index == 2 ? true : false;
 
                             searchController.clear();
@@ -187,7 +187,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                           children: snapshot.data!.docs.where(
                                   (QueryDocumentSnapshot<Object?> element) =>
                                   element['text']
-                                      .toString().contains(
+                                      .toString().toLowerCase().contains(
                                       searchController.text.toLowerCase()) && !element["isDisabled"])
                               .map((QueryDocumentSnapshot<Object?> data) =>
                               PostTile(
@@ -304,7 +304,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                         isSelected: isSelected,
                         onPressed: (int index) {
                           setState(() {
-                            isSelected[0] = index == 1 ? false: true;
+                            isSelected[0] = index == 0 ? true: false;
                             isSelected[1] = index == 1 ? true : false;
                             isSelected[2] = index == 2 ? true : false;
 
