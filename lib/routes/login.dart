@@ -324,7 +324,7 @@ class _LoginState extends State<Login> {
               {
                 return FeedView(analytics: widget.analytics, observer: widget.observer);
               }
-            return const Center(child: CircularProgressIndicator(),);
+            return const Scaffold(body: Center(child: CircularProgressIndicator(),));
 
           }
       );

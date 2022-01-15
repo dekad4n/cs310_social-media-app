@@ -22,7 +22,6 @@ class AddPost extends StatefulWidget {
 class _AddPostState extends State<AddPost> {
   File? image;
   String? text;
-  String? topictext;
 
   final _formKey = GlobalKey<FormState>();
   UsersService usersService = UsersService();
@@ -89,12 +88,14 @@ class _AddPostState extends State<AddPost> {
                             }
                             final timestamp = DateTime.now(); // timestamp in seconds
                             String today = timestamp.year.toString() + "/" +timestamp.month.toString() + "/"+ timestamp.day.toString();
-                            Post post = Post(userId: user.uid,postId: userProfile.postCount+1,username: userProfile.username,image: imageStr,text: text ?? "", likeCount: 0, date: today.toString(), comments: [], dislikeCount: 0, isDisabled: false, isShared: false, fromWho: "",Topic: topictext ?? "");
+                            Post post = Post(userId: user.uid,topic: topic ?? "",postId: userProfile.postCount+1,username: userProfile.username,image: imageStr,text: text ?? "", likeCount: 0, date: today.toString(), comments: [], dislikeCount: 0, isDisabled: false, isShared: false, fromWho: "");
                             userService.createPost(user.uid, post);
-                            if(topictext != null && topictext != "") {
-                              TopicService().addToTopic(topictext!,
-                                  post.userId + post.postId.toString());
-                            }
+                            if(topic != null && topic != "")
+                              {
+                                TopicService().addToTopic(topic!, user.uid + post.postId.toString());
+                              }
+
+
                             Navigator.pushNamed(context, '/profile');
                           },
                           child: Text(
@@ -130,6 +131,11 @@ class _AddPostState extends State<AddPost> {
                                   TextFormField(
                                     onSaved:(value){ text =value;},
                                   ),
+                                  const SizedBox(height: 4,),
+                                  const Text("Topic"),
+                                  TextFormField(
+                                    onSaved:(value){ topic =value;},
+                                  )
                                 ],
                               )),
 

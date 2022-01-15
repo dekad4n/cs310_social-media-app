@@ -1,35 +1,53 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sucial_cs310_project/model/post.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TopicService{
-  final CollectionReference topics = FirebaseFirestore.instance.collection('Topic');
+  CollectionReference topics = FirebaseFirestore.instance.collection("Topic");
 
-  addToTopic(String topicName,String postID)async{
-    final docRef = await topics.doc(topicName).get();
-    if(docRef.exists)
-    {
-      await topics.doc(topicName).update(
+  Future<void> addToTopic(String topicName, String postId) async
+  {
+    DocumentSnapshot ds = await topics.doc(topicName).get();
+    if(ds.exists){
+      topics.doc(topicName).update(
           {
-            'postIdList': FieldValue.arrayUnion([postID])
+            'postIdList': FieldValue.arrayUnion([postId])
           }
       );
-
-
     }
     else{
-      await topics.doc(topicName).set(
+      topics.doc(topicName).set(
+        {
+          'postIdList': [postId],
+          'subscribed': [],
+          'topicName': topicName
+        }
+      );
+    }
+  }
+
+  Future<void> subscribeToTopic(String topicName, String userId) async{
+      topics.doc(topicName).update(
+        {
+          'subscribed': FieldValue.arrayUnion([userId])
+        }
+      );
+    }
+    Future<void> unsubscribeFromTopic(String topicName, String userId) async {
+      topics.doc(topicName).update(
           {
-            'postIdList': [postID]
+            'subscribed': FieldValue.arrayRemove([userId])
           }
       );
     }
+    Future<void> getTopicPosts(String userId) async{
+      final QuerySnapshot result = await topics
+          .where('topic', arrayContains: userId).get();
+      final List<DocumentSnapshot> documents = result.docs;
+      for(int i = 0 ; i <documents.length ; i++)
+        {
+          
+        }
 
-  }
-
-
-
-
-
+    }
 
 }

@@ -9,6 +9,7 @@ import 'package:sucial_cs310_project/model/user_profile.dart';
 import 'package:sucial_cs310_project/routes/comments.dart';
 import 'package:sucial_cs310_project/routes/edit_profile.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
+import 'package:sucial_cs310_project/routes/subscribed_topics.dart';
 import 'package:sucial_cs310_project/routes/user_details/bookmarks.dart';
 import 'package:sucial_cs310_project/routes/user_details/followers.dart';
 import 'package:sucial_cs310_project/routes/user_details/following.dart';
@@ -117,17 +118,17 @@ class _ProfileViewState extends State<ProfileView> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              IconButton(
-                                  onPressed: (){},
-                                  tooltip: 'LOCATION',
-                                  icon: const Icon(Icons.add_location)
-                              ),
+
                               IconButton(
                                   onPressed: (){
-
+                                    Navigator.push(context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SubscribedTopics()
+                                        )
+                                    );
                                   },
                                   tooltip: 'IDK',
-                                  icon: const Icon(Icons.not_started)
+                                  icon: const Icon(Icons.tag)
                               ),
 
                             ],
@@ -201,7 +202,9 @@ class _ProfileViewState extends State<ProfileView> {
                                         isDisabled: post["isDisabled"],
                                         isShared: true,
                                         fromWho: post["username"],
-                                        Topic: post["Topic"]
+                                        topic: post["topic"] ?? ""
+
+
                                     );
                                     usersService.createPost(user.uid, addPost);
                                       },
