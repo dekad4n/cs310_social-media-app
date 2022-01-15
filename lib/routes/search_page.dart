@@ -26,7 +26,7 @@ class SearchPage2 extends StatefulWidget {
 
 class _SearchPageState2 extends State<SearchPage2> {
   TextEditingController searchController =  TextEditingController();
-  List<bool> isSelected = [true,false];
+  List<bool> isSelected = [true,false, false];
   late Future<QuerySnapshot>  searchResultsFuture;
   UsersService userService = UsersService();
   PostService postService = PostService();
@@ -90,12 +90,14 @@ class _SearchPageState2 extends State<SearchPage2> {
                         children: const<Widget>[
                           Text("User Search"),
                           Text("Post Search"),
+                          Text("Topic Search")
                         ],
                         isSelected: isSelected,
                         onPressed: (int index) {
                           setState(() {
-                            isSelected[0] = index == 1 ? false: true;
+                            isSelected[0] = index == 0 ? true: false;
                             isSelected[1] = index == 1 ? true : false;
+                            isSelected[2] = index == 2 ? true : false;
                             searchController.clear();
 
                           });
@@ -108,7 +110,7 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   (QueryDocumentSnapshot<Object?> element) =>
                                   element['usernameLower']
                                       .toString().contains(
-                                      searchController.text.toLowerCase()) /*&& !element["isDisabled"]*/)
+                                      searchController.text.toLowerCase()) && !element["isDisabled"])
                               .map((QueryDocumentSnapshot<Object?> data) =>
                               SearchCard(
                                 analytics: widget.analytics,
@@ -130,7 +132,7 @@ class _SearchPageState2 extends State<SearchPage2> {
 
       );
     }
-    else{
+    else if(isSelected[1]){
       return Scaffold(
         backgroundColor: AppColors.backgroundColor,
         body: StreamBuilder<QuerySnapshot>(
@@ -165,12 +167,15 @@ class _SearchPageState2 extends State<SearchPage2> {
                         children: const <Widget>[
                           Text("User Search"),
                           Text("Post Search"),
+                          Text("Topic Search")
                         ],
                         isSelected: isSelected,
                         onPressed: (int index) {
                           setState(() {
                             isSelected[0] = index == 1 ? false: true;
-                            isSelected[1] = index == 1 ? true : false;
+                            isSelected[1] = index == 1 ? true : false;                            isSelected[2] = index == 2 ? true : false;
+                            isSelected[2] = index == 2 ? true : false;
+
                             searchController.clear();
                           });
 
@@ -221,7 +226,8 @@ class _SearchPageState2 extends State<SearchPage2> {
                                       image: data["image"],
                                       isDisabled: data["isDisabled"],
                                       isShared: true,
-                                      fromWho: data["username"]
+                                      fromWho: data["username"],
+                                      topic: data["topic"] ?? ""
                                   );
                                   userService.createPost(user.uid, post);
                                 },
@@ -239,7 +245,9 @@ class _SearchPageState2 extends State<SearchPage2> {
                                   image: data["image"],
                                   isDisabled: data["isDisabled"],
                                   isShared: data["isShared"],
-                                  fromWho: data["fromWho"]
+                                  fromWho: data["fromWho"],
+                                  topic: data["topic"] ?? ""
+
                                 ),
                               )).toList(),
                         )
@@ -249,6 +257,139 @@ class _SearchPageState2 extends State<SearchPage2> {
               );
 
             }
+
+
+        ),
+        bottomNavigationBar: bottomNavBar(context),
+
+      );
+    }
+    else{
+      return Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: StreamBuilder<QuerySnapshot>(
+            stream: postService.posts.snapshots().asBroadcastStream(),
+            builder: (BuildContext context,
+                AsyncSnapshot<QuerySnapshot> snapshot) {
+              return SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 40,),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TextFormField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            hintText: "Search Something.....",
+                            fillColor: Colors.white,
+                            filled: true,
+                            prefixIcon: const Icon(
+                              Icons.search,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: clearSearch,
+                            ),
+                          ),
+
+                        ),
+                      ),
+                      ToggleButtons(
+                        children: const <Widget>[
+                          Text("User Search"),
+                          Text("Post Search"),
+                          Text("Topic Search")
+                        ],
+                        isSelected: isSelected,
+                        onPressed: (int index) {
+                          setState(() {
+                            isSelected[0] = index == 1 ? false: true;
+                            isSelected[1] = index == 1 ? true : false;
+                            isSelected[2] = index == 2 ? true : false;
+
+                            searchController.clear();
+                          });
+
+                        },
+                      ),
+                      const SizedBox(height: 40,),
+                      if(searchController.text != "")
+                        Column(
+                          children: snapshot.data!.docs.where(
+                                  (QueryDocumentSnapshot<Object?> element) =>
+                              element['topic']
+                                  .toString().contains(
+                                  searchController.text) && !element["isDisabled"])
+                              .map((QueryDocumentSnapshot<Object?> data) =>
+                              PostTile(
+                                delete: (){},
+                                incrementDislike: (){
+                                  userService.dislikePost(user!.uid, data["userId"], data["postId"]);
+                                },
+                                incrementComment: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CommentsView(
+                                                  userId: user!.uid,
+                                                  otherUserId: data["userId"],
+                                                  postId: data["postId"]
+                                              )
+                                      )
+                                  );
+                                },
+                                incrementLike: (){
+                                  userService.likePost(user!.uid, data["userId"], data["postId"]);
+                                },
+                                sharePost: () async{
+                                  final username = await userService.getUserName(user!.uid);
+                                  final postCount = await userService.getPostCount(user.uid);
+                                  final post = Post(
+                                      comments: data["comments"],
+                                      date:data["date"],
+                                      dislikeCount: data["dislikes"].length,
+                                      likeCount: data["likes"].length,
+                                      postId: postCount + 1,
+                                      text: data["text"],
+                                      userId: data["userId"],
+                                      username: username,
+                                      image: data["image"],
+                                      isDisabled: data["isDisabled"],
+                                      isShared: true,
+                                      fromWho: data["username"],
+                                      topic: data["topic"] ?? ""
+                                  );
+                                  userService.createPost(user.uid, post);
+                                },
+                                isOther: true,
+                                post: Post(
+
+                                    comments: data["comments"],
+                                    date:data["date"],
+                                    dislikeCount: data["dislikes"].length,
+                                    likeCount: data["likes"].length,
+                                    postId: data["postId"],
+                                    text: data["text"],
+                                    userId: data["userId"],
+                                    username: data["username"],
+                                    image: data["image"],
+                                    isDisabled: data["isDisabled"],
+                                    isShared: data["isShared"],
+                                    fromWho: data["fromWho"],
+                                    topic: data["topic"] ?? ""
+
+                                ),
+                              )).toList(),
+                        )
+                    ],
+                  ),
+                ),
+              );
+
+            }
+
 
         ),
         bottomNavigationBar: bottomNavBar(context),

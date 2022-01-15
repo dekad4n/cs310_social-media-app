@@ -99,7 +99,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     child: CircleAvatar(
                                                       child: ClipOval(
                                                         child: Image.network(
-                                                          otherUserPp
+                                                          otherUserPp,
+                                                          fit: BoxFit.cover,
                                                         ),
                                                       ),
                                                     ),

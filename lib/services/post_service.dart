@@ -75,5 +75,12 @@ class PostService{
   deletePost(String userId, Map<String, dynamic> post) async{
     posts.doc(userId + post["postId"].toString()).delete();
   }
+  getPosts(String topicName) async
+  {
+    final QuerySnapshot result = await posts
+        .where('topic', isEqualTo: topicName).get();
+    final List<DocumentSnapshot> documents = result.docs;
+    return documents;
+  }
 
 }

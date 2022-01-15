@@ -147,7 +147,7 @@ BottomNavigationBar bottomNavBar(BuildContext context)
         BottomNavigationBarItem(
           icon: IconButton(
             onPressed: (){
-              Navigator.pushNamed(context, '/feed');
+              Navigator.pushNamed(context, '/topics');
             },
             icon: const Icon(Icons.tag),
           ),

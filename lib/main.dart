@@ -7,6 +7,7 @@ import 'package:sucial_cs310_project/routes/notification.dart';
 import 'package:sucial_cs310_project/routes/search_page.dart';
 import 'package:sucial_cs310_project/routes/feed.dart';
 import 'package:sucial_cs310_project/routes/profile_view.dart';
+import 'package:sucial_cs310_project/routes/search_topics.dart';
 import 'package:sucial_cs310_project/routes/signup_followup.dart';
 import 'package:sucial_cs310_project/routes/walkthrough.dart';
 import 'package:sucial_cs310_project/routes/login.dart';
@@ -91,6 +92,7 @@ class AppBase extends StatelessWidget {
           '/search_page': (context) => SearchPage2(analytics: analytics, observer: observer),
           '/signup_followup': (context) => SignUpFollowUp(analytics: analytics, observer: observer),
           '/notification': (context) => Notifications(analytics: analytics, observer: observer),
+          '/topics': (context) => SearchTopics()
         },
 
       ),

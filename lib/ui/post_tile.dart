@@ -90,6 +90,8 @@ class PostTile extends StatelessWidget {
 
               ],
             ),
+            if(post.topic != "")
+              Text('#${post.topic}'),
             const SizedBox(height: 16),
             if (post.image != null) Image.network(
               post.image!,

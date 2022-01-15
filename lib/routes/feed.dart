@@ -68,7 +68,7 @@ class _FeedViewState extends State<FeedView> {
                         for (int i = 0; i < following.length; i++) {
                           posts = posts + querySnapshot.data!.docs.where(
                                   (QueryDocumentSnapshot<Object?> element) {
-                                return (following.contains(element["userId"]) && !element["isDisabled"]);
+                                return ((following.contains(element["userId"])) && !element["isDisabled"]);
                               }
                           ).map((data) => (data["posts"])).toList();
                           posts = posts.isNotEmpty? posts[0] : posts;
@@ -120,7 +120,8 @@ class _FeedViewState extends State<FeedView> {
                                               image: post["image"],
                                               isDisabled: post["isDisabled"],
                                               isShared: true,
-                                              fromWho: post["username"]
+                                              fromWho: post["username"],
+                                              topic: post["topic"] ?? ""
                                           );
                                           usersService.createPost(user.uid, addPost);
                                         },

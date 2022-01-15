@@ -184,7 +184,8 @@ class _OtherUserState extends State<OtherUser> {
                                     image: post["image"],
                                     isDisabled: post["isDisabled"],
                                     isShared: true,
-                                    fromWho: post["username"]
+                                    fromWho: post["username"],
+                                    topic: post["topic"] ?? ""
                                 );
                                 usersService.createPost(user.uid, addPost);
                               },
