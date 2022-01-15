@@ -26,7 +26,7 @@ class Post{
     required this.isDisabled,
     required this.fromWho,
     required this.isShared,
-    required this.topic
+    required this.topic,
   });
   @override
   String toString() => 'Post: $text\nDate: $date\nLikes: $likeCount\nComments: $comments\nDislikes: $dislikeCount';
