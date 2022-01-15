@@ -204,6 +204,7 @@ class _ProfileViewState extends State<ProfileView> {
                                         fromWho: post["username"],
                                         topic: post["topic"] ?? ""
 
+
                                     );
                                     usersService.createPost(user.uid, addPost);
                                       },

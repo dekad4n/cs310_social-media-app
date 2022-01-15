@@ -72,6 +72,13 @@ class PostService{
       'text': text
     });
   }
+
+  Future<void> editTopic(String postId, String text) async{ //BU eklendi User servicele birlikte calisan bir sey olması lzm
+    posts.doc(postId).update({
+      'Topic': text
+    });
+  }
+
   deletePost(String userId, Map<String, dynamic> post) async{
     posts.doc(userId + post["postId"].toString()).delete();
   }
@@ -82,5 +89,6 @@ class PostService{
     final List<DocumentSnapshot> documents = result.docs;
     return documents;
   }
+
 
 }

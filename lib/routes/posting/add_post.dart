@@ -22,7 +22,7 @@ class AddPost extends StatefulWidget {
 class _AddPostState extends State<AddPost> {
   File? image;
   String? text;
-  String? topic;
+
   final _formKey = GlobalKey<FormState>();
   UsersService usersService = UsersService();
   Future pickImage() async {
@@ -95,6 +95,7 @@ class _AddPostState extends State<AddPost> {
                                 TopicService().addToTopic(topic!, user.uid + post.postId.toString());
                               }
 
+
                             Navigator.pushNamed(context, '/profile');
                           },
                           child: Text(
@@ -114,6 +115,8 @@ class _AddPostState extends State<AddPost> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+
+
                           IconButton(
                               iconSize: MediaQuery.of(context).size.width,
                               onPressed: () => pickImage(),
@@ -134,7 +137,19 @@ class _AddPostState extends State<AddPost> {
                                     onSaved:(value){ topic =value;},
                                   )
                                 ],
-                              ))
+                              )),
+
+                          Padding(
+                              padding: Dimen.symmetricSignupInsets,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("Post Topic"),
+                                  TextFormField(
+                                    onSaved:(value){ topictext =value;},
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
                     ),

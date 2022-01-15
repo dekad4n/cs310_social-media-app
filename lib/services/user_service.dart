@@ -21,6 +21,9 @@ class UsersService{
       'fullName': 'unknown',
       'isSignupDone': false,
       'followers': [],
+
+      'subscribedTopic': [], // bunun fonksiyonlarını eklicez
+
       'following': [],
       'posts': [],
       'requests': [],
@@ -208,8 +211,6 @@ class UsersService{
 
   }
 
-
-
   pushNotifications(String crrUserId, String otherUserId, String message) async
   {
     // var crrGet = await users.doc(crrUserId);
@@ -271,7 +272,7 @@ class UsersService{
     users.doc(userId).update(
       {
         'posts': FieldValue.arrayUnion([post.toJson()]),
-        'postCount': FieldValue.increment(1)
+        'postCount': FieldValue.increment(1),
       }
     );
     PostService postService = PostService();
