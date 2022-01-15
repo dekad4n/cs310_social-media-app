@@ -22,6 +22,7 @@ class AddPost extends StatefulWidget {
 class _AddPostState extends State<AddPost> {
   File? image;
   String? text;
+  String? topic;
 
   final _formKey = GlobalKey<FormState>();
   UsersService usersService = UsersService();
@@ -136,18 +137,6 @@ class _AddPostState extends State<AddPost> {
                                   TextFormField(
                                     onSaved:(value){ topic =value;},
                                   )
-                                ],
-                              )),
-
-                          Padding(
-                              padding: Dimen.symmetricSignupInsets,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Post Topic"),
-                                  TextFormField(
-                                    onSaved:(value){ topictext =value;},
-                                  ),
                                 ],
                               )),
                         ],
